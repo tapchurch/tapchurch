@@ -47,7 +47,10 @@ export default function TeamPage() {
         return;
       }
 
-      const orgData = data.organizations as Organization;
+      const orgValue = Array.isArray(data.organizations)
+        ? data.organizations[0]
+        : data.organizations;
+      const orgData = orgValue as Organization;
       setOrg(orgData);
 
       const { data: memberData, error: memberError } = await supabase

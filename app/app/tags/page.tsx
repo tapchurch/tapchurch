@@ -64,7 +64,10 @@ export default function TagsPage() {
         return;
       }
 
-      const orgData = data.organizations as Organization;
+      const orgValue = Array.isArray(data.organizations)
+        ? data.organizations[0]
+        : data.organizations;
+      const orgData = orgValue as Organization;
       setOrg(orgData);
 
       const { data: locationData, error: locationError } = await supabase

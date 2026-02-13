@@ -65,7 +65,10 @@ export default function SettingsPage() {
         return;
       }
 
-      const orgData = data.organizations as Organization;
+      const orgValue = Array.isArray(data.organizations)
+        ? data.organizations[0]
+        : data.organizations;
+      const orgData = orgValue as Organization;
       setOrg(orgData);
       setLogoUrl(orgData.logo_url ?? "");
       setPrimaryColor(orgData.primary_color ?? "#000000");
