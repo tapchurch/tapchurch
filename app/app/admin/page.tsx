@@ -7,7 +7,18 @@ type Organization = {
   id: string;
   name: string;
   slug: string;
+  contact_email: string | null;
+  contact_phone: string | null;
   created_at: string;
+};
+
+type Invite = {
+  id: string;
+  organization_id: string;
+  email: string;
+  status: "pending" | "accepted";
+  created_at: string;
+  accepted_at: string | null;
 };
 
 type GlobalMetrics = {
@@ -24,11 +35,15 @@ export default function AdminPage() {
   const [email, setEmail] = useState("");
   const [metrics, setMetrics] = useState<GlobalMetrics | null>(null);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [invites, setInvites] = useState<Record<string, Invite>>({});
   const [newName, setNewName] = useState("");
   const [newSlug, setNewSlug] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newPhone, setNewPhone] = useState("");
   const [createLoading, setCreateLoading] = useState(false);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [inviteLoadingId, setInviteLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   function slugify(value: string) {
@@ -42,7 +57,8 @@ export default function AdminPage() {
   }
 
   async function loadAdminData() {
-    const [orgRes, locRes, tagRes, linkRes, memberRes, orgListRes] = await Promise.all([
+    const [orgRes, locRes, tagRes, linkRes, memberRes, orgListRes, inviteRes] =
+      await Promise.all([
       supabase.from("organizations").select("id", { count: "exact", head: true }),
       supabase.from("locations").select("id", { count: "exact", head: true }),
       supabase.from("tags").select("id", { count: "exact", head: true }),
@@ -50,9 +66,13 @@ export default function AdminPage() {
       supabase.from("memberships").select("id", { count: "exact", head: true }),
       supabase
         .from("organizations")
-        .select("id, name, slug, created_at")
+        .select("id, name, slug, contact_email, contact_phone, created_at")
         .order("created_at", { ascending: false })
-        .limit(100)
+        .limit(100),
+      supabase
+        .from("pending_memberships")
+        .select("id, organization_id, email, status, created_at, accepted_at")
+        .order("created_at", { ascending: false })
     ]);
 
     setMetrics({
@@ -64,6 +84,14 @@ export default function AdminPage() {
     });
 
     setOrganizations(orgListRes.data ?? []);
+
+    const inviteMap: Record<string, Invite> = {};
+    (inviteRes.data ?? []).forEach((invite) => {
+      if (!inviteMap[invite.organization_id]) {
+        inviteMap[invite.organization_id] = invite as Invite;
+      }
+    });
+    setInvites(inviteMap);
   }
 
   useEffect(() => {
@@ -113,28 +141,62 @@ export default function AdminPage() {
   async function handleCreateClient() {
     const name = newName.trim();
     const slug = slugify(newSlug || newName);
+    const email = newEmail.trim().toLowerCase();
+    const phone = newPhone.trim();
 
-    if (!name || !slug) {
-      setError("Preencha nome e slug validos para criar o cliente.");
+    if (!name || !slug || !email) {
+      setError("Preencha nome, slug e email para criar o cliente.");
       return;
     }
 
     setCreateLoading(true);
     setError(null);
 
-    const { error: insertError } = await supabase
+    const { data: userData } = await supabase.auth.getUser();
+
+    const { data: orgData, error: insertError } = await supabase
       .from("organizations")
-      .insert({ name, slug });
+      .insert({
+        name,
+        slug,
+        contact_email: email,
+        contact_phone: phone || null
+      })
+      .select("id")
+      .single();
+
+    if (insertError || !orgData) {
+      setError(`Nao foi possivel criar cliente: ${insertError.message}`);
+      setCreateLoading(false);
+      return;
+    }
+
+    const { error: inviteError } = await supabase
+      .from("pending_memberships")
+      .upsert(
+        {
+          organization_id: orgData.id,
+          email,
+          role: "owner",
+          status: "pending",
+          invited_by: userData.user?.id ?? null,
+          accepted_at: null
+        },
+        { onConflict: "organization_id,email" }
+      );
 
     setCreateLoading(false);
 
-    if (insertError) {
-      setError(`Nao foi possivel criar cliente: ${insertError.message}`);
-      return;
+    if (inviteError) {
+      setError(
+        `Cliente criado, mas o vinculo por email falhou: ${inviteError.message}`
+      );
     }
 
     setNewName("");
     setNewSlug("");
+    setNewEmail("");
+    setNewPhone("");
     await loadAdminData();
   }
 
@@ -150,15 +212,58 @@ export default function AdminPage() {
     setSavingId(org.id);
     setError(null);
 
+    const normalizedEmail = org.contact_email?.trim().toLowerCase() ?? null;
+    const normalizedPhone = org.contact_phone?.trim() || null;
+
     const { error: updateError } = await supabase
       .from("organizations")
-      .update({ name, slug })
+      .update({
+        name,
+        slug,
+        contact_email: normalizedEmail,
+        contact_phone: normalizedPhone
+      })
       .eq("id", org.id);
 
     setSavingId(null);
 
     if (updateError) {
       setError(`Nao foi possivel salvar cliente: ${updateError.message}`);
+      return;
+    }
+
+    await loadAdminData();
+  }
+
+  async function handleResendInvite(org: Organization) {
+    const email = org.contact_email?.trim().toLowerCase();
+    if (!email) {
+      setError("Defina um email do cliente para criar o vinculo principal.");
+      return;
+    }
+
+    setInviteLoadingId(org.id);
+    setError(null);
+
+    const { data: userData } = await supabase.auth.getUser();
+    const { error: inviteError } = await supabase
+      .from("pending_memberships")
+      .upsert(
+        {
+          organization_id: org.id,
+          email,
+          role: "owner",
+          status: "pending",
+          invited_by: userData.user?.id ?? null,
+          accepted_at: null
+        },
+        { onConflict: "organization_id,email" }
+      );
+
+    setInviteLoadingId(null);
+
+    if (inviteError) {
+      setError(`Falha ao criar convite por email: ${inviteError.message}`);
       return;
     }
 
@@ -275,7 +380,7 @@ export default function AdminPage() {
 
         <section className="card" style={{ marginTop: 32 }}>
           <h3>Cadastrar novo cliente</h3>
-          <p>Crie a igreja cliente direto por este painel global.</p>
+          <p>Crie a igreja cliente e vincule o email principal da conta.</p>
           <div className="admin-form-grid">
             <input
               className="admin-input"
@@ -292,6 +397,19 @@ export default function AdminPage() {
               placeholder="slug-da-igreja"
               value={newSlug}
               onChange={(e) => setNewSlug(slugify(e.target.value))}
+            />
+            <input
+              className="admin-input"
+              type="email"
+              placeholder="email principal"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+            />
+            <input
+              className="admin-input"
+              placeholder="telefone"
+              value={newPhone}
+              onChange={(e) => setNewPhone(e.target.value)}
             />
             <button
               className="btn btn-primary"
@@ -341,8 +459,47 @@ export default function AdminPage() {
                       }
                     />
                   </div>
+                  <div className="admin-org-fields">
+                    <input
+                      className="admin-input"
+                      type="email"
+                      placeholder="email principal"
+                      value={org.contact_email ?? ""}
+                      onChange={(e) =>
+                        setOrganizations((prev) =>
+                          prev.map((item) =>
+                            item.id === org.id
+                              ? { ...item, contact_email: e.target.value }
+                              : item
+                          )
+                        )
+                      }
+                    />
+                    <input
+                      className="admin-input"
+                      placeholder="telefone"
+                      value={org.contact_phone ?? ""}
+                      onChange={(e) =>
+                        setOrganizations((prev) =>
+                          prev.map((item) =>
+                            item.id === org.id
+                              ? { ...item, contact_phone: e.target.value }
+                              : item
+                          )
+                        )
+                      }
+                    />
+                  </div>
                   <span className="admin-muted">
                     Criado em: {new Date(org.created_at).toLocaleString("pt-BR")}
+                  </span>
+                  <span className="admin-muted">
+                    Vinculo da conta:{" "}
+                    {invites[org.id]?.status === "accepted"
+                      ? "ativo"
+                      : invites[org.id]?.status === "pending"
+                        ? "convite pendente"
+                        : "sem convite"}
                   </span>
                   <div className="admin-actions">
                     <button
@@ -357,6 +514,15 @@ export default function AdminPage() {
                       disabled={savingId === org.id}
                     >
                       {savingId === org.id ? "Salvando..." : "Salvar"}
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => handleResendInvite(org)}
+                      disabled={inviteLoadingId === org.id}
+                    >
+                      {inviteLoadingId === org.id
+                        ? "Gerando..."
+                        : "Gerar convite"}
                     </button>
                     <button
                       className="btn btn-danger"

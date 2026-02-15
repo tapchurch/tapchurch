@@ -47,6 +47,18 @@ export default function OnboardingPage() {
         window.location.href = "/login";
         return;
       }
+
+      const { data: membership } = await supabase
+        .from("memberships")
+        .select("id")
+        .eq("user_id", data.user.id)
+        .maybeSingle();
+
+      if (membership) {
+        window.location.href = "/app";
+        return;
+      }
+
       setLoading(false);
     }
     checkSession();

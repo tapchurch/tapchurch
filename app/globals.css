@@ -387,7 +387,7 @@ main {
 .admin-form-grid {
   display: grid;
   gap: 10px;
-  grid-template-columns: 1.6fr 1fr auto;
+  grid-template-columns: 1.4fr 1fr 1.2fr 1fr auto;
   align-items: center;
 }
 

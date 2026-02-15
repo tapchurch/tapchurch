@@ -30,13 +30,42 @@ export default function DashboardPage() {
         window.location.href = "/login";
         return;
       }
-      setProfile({ email: data.user.email ?? "" });
+      const userEmail = (data.user.email ?? "").toLowerCase();
+      setProfile({ email: userEmail });
+
+      // Se existir convite pendente para esse email, cria o vinculo automaticamente.
+      const { data: pendingInvites } = await supabase
+        .from("pending_memberships")
+        .select("id, organization_id, role")
+        .eq("email", userEmail)
+        .eq("status", "pending");
+
+      if (pendingInvites && pendingInvites.length > 0) {
+        for (const invite of pendingInvites) {
+          await supabase.from("memberships").upsert(
+            {
+              user_id: data.user.id,
+              organization_id: invite.organization_id,
+              role: invite.role ?? "owner"
+            },
+            { onConflict: "user_id,organization_id" }
+          );
+
+          await supabase
+            .from("pending_memberships")
+            .update({
+              status: "accepted",
+              accepted_at: new Date().toISOString()
+            })
+            .eq("id", invite.id);
+        }
+      }
 
       const { data: membershipData } = await supabase
         .from("memberships")
         .select("organization_id, organizations(name)")
         .eq("user_id", data.user.id)
-        .single();
+        .maybeSingle();
 
       const orgId = membershipData?.organization_id;
       const org = membershipData?.organizations as { name?: string } | null;
