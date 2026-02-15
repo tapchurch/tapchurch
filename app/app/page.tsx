@@ -21,6 +21,7 @@ export default function DashboardPage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [orgName, setOrgName] = useState<string | null>(null);
   const [metrics, setMetrics] = useState<Metrics | null>(null);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
   useEffect(() => {
     async function loadSession() {
@@ -40,6 +41,14 @@ export default function DashboardPage() {
       const orgId = membershipData?.organization_id;
       const org = membershipData?.organizations as { name?: string } | null;
       setOrgName(org?.name ?? null);
+
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", data.user.id)
+        .eq("role", "super_admin")
+        .maybeSingle();
+      setIsSuperAdmin(Boolean(roleData));
 
       if (orgId) {
         const [locationsRes, tagsRes, locationIdsRes] = await Promise.all([
@@ -126,6 +135,7 @@ export default function DashboardPage() {
           <div className="brand">{orgName ?? "TAP CHURCH"}</div>
           <div className="nav-links">
             <span>Logado: {profile?.email}</span>
+            {isSuperAdmin ? <a href="/app/admin">Painel global</a> : null}
           </div>
           <button className="btn btn-secondary" onClick={handleLogout}>
             Sair
