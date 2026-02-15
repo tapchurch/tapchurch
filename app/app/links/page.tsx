@@ -50,6 +50,7 @@ export default function LinksPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const [title, setTitle] = useState("");
@@ -306,6 +307,18 @@ export default function LinksPage() {
     setSaving(false);
   }
 
+  async function handleCopyPublicUrl() {
+    if (!org || !selectedLocation) return;
+    const publicUrl = `${window.location.origin}/go/${org.slug}/${selectedLocation.slug}`;
+    try {
+      await navigator.clipboard.writeText(publicUrl);
+      setCopyMessage("URL copiada.");
+    } catch {
+      setCopyMessage("Nao foi possivel copiar.");
+    }
+    setTimeout(() => setCopyMessage(null), 1800);
+  }
+
   if (loading) {
     return (
       <main>
@@ -347,8 +360,11 @@ export default function LinksPage() {
         </section>
 
         <section className="grid" style={{ marginTop: 32 }}>
-          <div className="card" style={{ gridColumn: "span 2" }}>
-            <h3>Selecionar localidade</h3>
+          <div className="card" style={{ gridColumn: "span 2", minHeight: "unset" }}>
+            <h3>Localidade ativa</h3>
+            <p style={{ color: "var(--muted)" }}>
+              Escolha qual localidade voce quer gerenciar agora.
+            </p>
             <select
               value={selectedLocationId}
               onChange={(event) => setSelectedLocationId(event.target.value)}
@@ -371,18 +387,28 @@ export default function LinksPage() {
               )}
             </select>
             {selectedLocation ? (
-              <div className="nav-actions" style={{ marginTop: 8 }}>
+              <div
+                style={{
+                  marginTop: 10,
+                  display: "grid",
+                  gap: 8
+                }}
+              >
                 <span style={{ color: "var(--muted)", fontSize: 12 }}>
-                  Link publico: /go/{org?.slug}/{selectedLocation.slug}
+                  URL publica: /go/{org?.slug}/{selectedLocation.slug}
                 </span>
-                <a
-                  className="btn btn-secondary"
-                  href={`/go/${org?.slug}/${selectedLocation.slug}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Previa do site
-                </a>
+                <div className="nav-actions">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleCopyPublicUrl}
+                  >
+                    Copiar URL
+                  </button>
+                  {copyMessage ? (
+                    <span style={{ color: "var(--muted)", fontSize: 13 }}>{copyMessage}</span>
+                  ) : null}
+                </div>
               </div>
             ) : null}
           </div>
@@ -798,7 +824,7 @@ export default function LinksPage() {
           </div>
 
           <div className="card" style={{ gridColumn: "span 2" }}>
-            <h3>Preview do micro-site</h3>
+            <h3>Previa da pagina</h3>
             <p style={{ color: "var(--muted)" }}>
               Simulacao de como o membro vai ver no celular.
             </p>
