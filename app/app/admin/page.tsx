@@ -138,6 +138,28 @@ export default function AdminPage() {
     window.location.href = "/login";
   }
 
+  async function sendInviteEmail(organizationId: string, email: string) {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const accessToken = sessionData.session?.access_token;
+    if (!accessToken) {
+      throw new Error("Sessao invalida para envio de convite.");
+    }
+
+    const response = await fetch("/api/admin/invite", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify({ organizationId, email })
+    });
+
+    if (!response.ok) {
+      const payload = (await response.json().catch(() => ({}))) as { error?: string };
+      throw new Error(payload.error ?? "Falha ao enviar convite por email.");
+    }
+  }
+
   async function handleCreateClient() {
     const name = newName.trim();
     const slug = slugify(newSlug || newName);
@@ -191,6 +213,16 @@ export default function AdminPage() {
       setError(
         `Cliente criado, mas o vinculo por email falhou: ${inviteError.message}`
       );
+      await loadAdminData();
+      return;
+    }
+
+    try {
+      await sendInviteEmail(orgData.id, email);
+    } catch (mailError) {
+      const message =
+        mailError instanceof Error ? mailError.message : "Erro ao enviar email.";
+      setError(`Cliente criado e vinculado, mas email nao enviado: ${message}`);
     }
 
     setNewName("");
@@ -265,6 +297,14 @@ export default function AdminPage() {
     if (inviteError) {
       setError(`Falha ao criar convite por email: ${inviteError.message}`);
       return;
+    }
+
+    try {
+      await sendInviteEmail(org.id, email);
+    } catch (mailError) {
+      const message =
+        mailError instanceof Error ? mailError.message : "Erro ao enviar email.";
+      setError(`Convite gerado, mas email nao enviado: ${message}`);
     }
 
     await loadAdminData();
