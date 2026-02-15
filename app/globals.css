@@ -30,6 +30,20 @@ a {
   text-decoration: none;
 }
 
+input,
+select,
+textarea {
+  color: var(--ink);
+  background: #ffffff;
+  caret-color: var(--ink);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #7a869c;
+  opacity: 1;
+}
+
 main {
   display: flex;
   flex-direction: column;

@@ -191,7 +191,7 @@ export default function TeamPage() {
                     padding: "12px 14px",
                     borderRadius: 12,
                     border: "1px solid var(--stroke)",
-                    background: "#0c0c0c",
+                    background: "#ffffff",
                     color: "var(--ink)"
                   }}
                 />
@@ -205,7 +205,7 @@ export default function TeamPage() {
                     padding: "12px 14px",
                     borderRadius: 12,
                     border: "1px solid var(--stroke)",
-                    background: "#0c0c0c",
+                    background: "#ffffff",
                     color: "var(--ink)"
                   }}
                 >
@@ -256,7 +256,7 @@ export default function TeamPage() {
                           padding: "8px 10px",
                           borderRadius: 10,
                           border: "1px solid var(--stroke)",
-                          background: "#0c0c0c",
+                          background: "#ffffff",
                           color: "var(--ink)"
                         }}
                       >

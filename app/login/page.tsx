@@ -54,7 +54,7 @@ export default function LoginPage() {
                     padding: "12px 14px",
                     borderRadius: 12,
                     border: "1px solid var(--stroke)",
-                    background: "#0c0c0c",
+                    background: "#ffffff",
                     color: "var(--ink)"
                   }}
                 />
@@ -78,7 +78,7 @@ export default function LoginPage() {
                       padding: "12px 14px",
                       borderRadius: 12,
                       border: "1px solid var(--stroke)",
-                      background: "#0c0c0c",
+                      background: "#ffffff",
                       color: "var(--ink)"
                     }}
                   />
