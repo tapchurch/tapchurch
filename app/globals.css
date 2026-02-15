@@ -117,6 +117,12 @@ main {
   color: var(--ink);
 }
 
+.btn-danger {
+  border-color: #f2b8b5;
+  background: #fff5f4;
+  color: #b42318;
+}
+
 .btn:hover {
   transform: translateY(-2px);
 }
@@ -378,6 +384,59 @@ main {
   opacity: 0.8;
 }
 
+.admin-form-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1.6fr 1fr auto;
+  align-items: center;
+}
+
+.admin-input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: #ffffff;
+  color: var(--ink);
+  padding: 12px 14px;
+  font-size: 14px;
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(14, 165, 166, 0.16);
+}
+
+.admin-org-list {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-org-item {
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.admin-org-fields {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 10px;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
 @media (max-width: 720px) {
   .nav {
     flex-direction: column;
@@ -394,5 +453,13 @@ main {
 
   .phone {
     width: 100%;
+  }
+
+  .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-org-fields {
+    grid-template-columns: 1fr;
   }
 }
