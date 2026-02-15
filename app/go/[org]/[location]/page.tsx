@@ -154,16 +154,17 @@ export default function PublicPage() {
 
   const featured = links.filter((link) => link.featured_type);
   const normal = links.filter((link) => !link.featured_type);
+  const headerLogo = org.logo_url || "/tapchurch.png";
 
-  const primaryColor = org.primary_color ?? "#0b0b0b";
-  const accentColor = org.accent_color ?? "#737373";
+  const primaryColor = org.primary_color ?? "#f4f7fb";
+  const accentColor = org.accent_color ?? "#0ea5a6";
 
   return (
     <main>
       <div className="container" style={{ maxWidth: 720 }}>
         <section style={{ marginTop: 24, display: "grid", gap: 16 }}>
           <div className="micro-header">
-            {org.logo_url ? <img src={org.logo_url} alt={org.name} /> : null}
+            <img src={headerLogo} alt={org.name} />
             <h1>{location.welcome_title ?? org.name}</h1>
             <p>
               {location.welcome_text ??
@@ -271,7 +272,7 @@ export default function PublicPage() {
       </div>
       <style>{`
         body { background: ${primaryColor}; }
-        .card { background: #111111; }
+        .card { background: #ffffff; }
       `}</style>
     </main>
   );

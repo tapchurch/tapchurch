@@ -32,8 +32,8 @@ export default function SettingsPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [logoUrl, setLogoUrl] = useState("");
-  const [primaryColor, setPrimaryColor] = useState("#000000");
-  const [accentColor, setAccentColor] = useState("#737373");
+  const [primaryColor, setPrimaryColor] = useState("#f4f7fb");
+  const [accentColor, setAccentColor] = useState("#0ea5a6");
 
   const [welcomeTitle, setWelcomeTitle] = useState("");
   const [welcomeText, setWelcomeText] = useState("");
@@ -71,8 +71,8 @@ export default function SettingsPage() {
       const orgData = orgValue as Organization;
       setOrg(orgData);
       setLogoUrl(orgData.logo_url ?? "");
-      setPrimaryColor(orgData.primary_color ?? "#000000");
-      setAccentColor(orgData.accent_color ?? "#737373");
+      setPrimaryColor(orgData.primary_color ?? "#f4f7fb");
+      setAccentColor(orgData.accent_color ?? "#0ea5a6");
 
       const { data: locationData, error: locationError } = await supabase
         .from("locations")

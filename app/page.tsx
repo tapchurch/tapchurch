@@ -3,7 +3,14 @@ export default function HomePage() {
     <main>
       <div className="container">
         <nav className="nav">
-          <div className="brand">TAP CHURCH</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <img
+              src="/tapchurch.png"
+              alt="TAP CHURCH"
+              style={{ width: 34, height: 34, objectFit: "contain" }}
+            />
+            <div className="brand">TAP CHURCH</div>
+          </div>
           <div className="nav-links">
             <a href="#como-funciona">Como funciona</a>
             <a href="#plataforma">Plataforma</a>
@@ -178,7 +185,14 @@ export default function HomePage() {
       </section>
 
       <div className="container footer">
-        <strong>TAP CHURCH</strong>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <img
+            src="/tapchurch.png"
+            alt="TAP CHURCH"
+            style={{ width: 24, height: 24, objectFit: "contain" }}
+          />
+          <strong>TAP CHURCH</strong>
+        </div>
         <span>Plataforma de ofertas por aproximacao para igrejas.</span>
         <span>Pix, Apple Pay e Google Pay por links proprios da igreja.</span>
         <span>comercial@tapchurch.com.br · WhatsApp 34 98405-9374</span>
