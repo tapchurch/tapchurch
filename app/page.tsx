@@ -2,14 +2,13 @@ export default function HomePage() {
   return (
     <main>
       <div className="container">
-        <nav className="nav">
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <nav className="nav nav-home">
+          <div className="home-brand">
             <img
               src="/tapchurch.png"
               alt="TAP CHURCH"
-              style={{ width: 34, height: 34, objectFit: "contain" }}
+              style={{ width: 150, height: 44, objectFit: "contain" }}
             />
-            <div className="brand">TAP CHURCH</div>
           </div>
           <div className="nav-links">
             <a href="#como-funciona">Como funciona</a>

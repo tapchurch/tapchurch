@@ -313,6 +313,11 @@ main {
   flex-wrap: wrap;
 }
 
+.home-brand {
+  display: flex;
+  align-items: center;
+}
+
 .phone {
   width: 280px;
   margin: 0 auto;
@@ -455,6 +460,22 @@ main {
   .nav {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .nav.nav-home {
+    align-items: center;
+  }
+
+  .nav.nav-home .home-brand {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .nav.nav-home .nav-links,
+  .nav.nav-home .btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
   }
 
   .nav-links {
