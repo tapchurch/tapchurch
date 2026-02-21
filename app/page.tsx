@@ -186,6 +186,25 @@ export default function HomePage() {
     </svg>
   );
 
+  const CircleIcon = ({
+    size = 16,
+    color = "currentColor"
+  }: {
+    size?: number;
+    color?: string;
+  }) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="8" fill={color} opacity="0.9" />
+    </svg>
+  );
+
   return (
     <main>
       <div className="container">
@@ -264,10 +283,14 @@ export default function HomePage() {
         <h2 className="section-title">{t.how.title}</h2>
         <p className="section-sub">{t.how.sub}</p>
         <div className="grid">
-          {t.how.cards.map(([title, text]) => (
+          {t.how.cards.map(([title, text], index) => (
             <div className="card" key={title}>
               <h3 className="icon-title">
-                {title.startsWith("1.") ? <NfcIcon /> : null}
+                {index === 0 ? (
+                  <NfcIcon />
+                ) : (
+                  <CircleIcon color={index % 2 === 0 ? "#60a5fa" : "#0ea5a6"} />
+                )}
                 {title}
               </h3>
               <p>{text}</p>
@@ -280,9 +303,12 @@ export default function HomePage() {
         <h2 className="section-title">{t.platform.title}</h2>
         <p className="section-sub">{t.platform.sub}</p>
         <div className="grid">
-          {t.platform.cards.map(([title, text]) => (
+          {t.platform.cards.map(([title, text], index) => (
             <div className="card" key={title}>
-              <h3>{title}</h3>
+              <h3 className="icon-title">
+                <CircleIcon color={index % 2 === 0 ? "#0ea5a6" : "#60a5fa"} />
+                {title}
+              </h3>
               <p>{text}</p>
             </div>
           ))}
@@ -293,10 +319,13 @@ export default function HomePage() {
         <h2 className="section-title">{t.pricing.title}</h2>
         <p className="section-sub">{t.pricing.sub}</p>
         <div className="pricing">
-          {t.pricing.cards.map(([badge, title, text]) => (
+          {t.pricing.cards.map(([badge, title, text], index) => (
             <div className="pricing-card" key={title}>
               <span className="badge">{badge}</span>
-              <h3>{title}</h3>
+              <h3 className="icon-title">
+                <CircleIcon color={index % 2 === 0 ? "#0ea5a6" : "#60a5fa"} />
+                {title}
+              </h3>
               <p>{text}</p>
             </div>
           ))}
