@@ -206,6 +206,12 @@ main {
   font-size: 18px;
 }
 
+.icon-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .card p {
   color: var(--muted);
   line-height: 1.5;
@@ -311,6 +317,33 @@ main {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  padding: 4px;
+  background: #ffffff;
+}
+
+.lang-btn {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.lang-btn.is-active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #ffffff;
 }
 
 .home-brand {
@@ -472,10 +505,16 @@ main {
   }
 
   .nav.nav-home .nav-links,
-  .nav.nav-home .btn {
+  .nav.nav-home .btn,
+  .nav.nav-home .lang-switch {
     width: 100%;
     justify-content: center;
     text-align: center;
+  }
+
+  .nav.nav-home .nav-actions {
+    width: 100%;
+    justify-content: center;
   }
 
   .nav-links {

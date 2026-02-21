@@ -200,20 +200,30 @@ export default function HomePage() {
             <a href="#contato">{t.nav.contact}</a>
             <a href="/login">{t.nav.login}</a>
           </div>
-          <div className="nav-actions">
-            <button type="button" className={`btn ${lang === "pt" ? "btn-primary" : "btn-secondary"}`} onClick={() => changeLanguage("pt")}>
+          <div className="lang-switch" role="tablist" aria-label="Selecionar idioma">
+            <button
+              type="button"
+              className={`lang-btn ${lang === "pt" ? "is-active" : ""}`}
+              onClick={() => changeLanguage("pt")}
+            >
               PT-BR
             </button>
-            <button type="button" className={`btn ${lang === "en" ? "btn-primary" : "btn-secondary"}`} onClick={() => changeLanguage("en")}>
+            <button
+              type="button"
+              className={`lang-btn ${lang === "en" ? "is-active" : ""}`}
+              onClick={() => changeLanguage("en")}
+            >
               EN
             </button>
           </div>
-          <a className="btn btn-secondary" href="#contato">
-            {t.nav.demo}
-          </a>
-          <a className="btn btn-primary" href="/login">
-            {t.nav.panel}
-          </a>
+          <div className="nav-actions">
+            <a className="btn btn-secondary" href="#contato">
+              {t.nav.demo}
+            </a>
+            <a className="btn btn-primary" href="/login">
+              {t.nav.panel}
+            </a>
+          </div>
         </nav>
       </div>
 
