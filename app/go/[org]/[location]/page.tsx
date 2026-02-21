@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import OfferCheckoutForm from "@/app/components/OfferCheckoutForm";
 
 type OrgData = {
   id: string;
@@ -204,6 +205,8 @@ export default function PublicPage() {
         </section>
 
         <section style={{ marginTop: 20, display: "grid", gap: 12 }}>
+          <OfferCheckoutForm churchSlug={org.slug} />
+
           {featured.length > 0 ? (
             <div style={{ display: "grid", gap: 10 }}>
               <span className="featured-badge">Destaques</span>

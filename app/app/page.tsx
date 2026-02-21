@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-
-type UserProfile = {
-  email: string;
-};
+import PanelHeader from "@/app/components/PanelHeader";
 
 type Metrics = {
   locations: number;
@@ -18,8 +15,6 @@ type Metrics = {
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [orgName, setOrgName] = useState<string | null>(null);
   const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
@@ -31,7 +26,6 @@ export default function DashboardPage() {
         return;
       }
       const userEmail = (data.user.email ?? "").toLowerCase();
-      setProfile({ email: userEmail });
 
       // Se existir convite pendente para esse email, cria o vinculo automaticamente.
       const { data: pendingInvites } = await supabase
@@ -68,8 +62,6 @@ export default function DashboardPage() {
         .maybeSingle();
 
       const orgId = membershipData?.organization_id;
-      const org = membershipData?.organizations as { name?: string } | null;
-      setOrgName(org?.name ?? null);
 
       const { data: roleData } = await supabase
         .from("user_roles")
@@ -142,11 +134,6 @@ export default function DashboardPage() {
     loadSession();
   }, []);
 
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    window.location.href = "/login";
-  }
-
   if (loading) {
     return (
       <main>
@@ -160,16 +147,17 @@ export default function DashboardPage() {
   return (
     <main>
       <div className="container">
-        <nav className="nav" style={{ marginBottom: 32 }}>
-          <div className="brand">{orgName ?? "TAP CHURCH"}</div>
-          <div className="nav-links">
-            <span>Logado: {profile?.email}</span>
-            {isSuperAdmin ? <a href="/app/admin">Painel global</a> : null}
-          </div>
-          <button className="btn btn-secondary" onClick={handleLogout}>
-            Sair
-          </button>
-        </nav>
+        <PanelHeader
+          navLinks={[
+            { href: "/app", label: "Painel" },
+            { href: "/app/locations", label: "Localidades" },
+            { href: "/app/tags", label: "Tags" },
+            { href: "/app/links", label: "Links" },
+            { href: "/app/team", label: "Equipe" },
+            { href: "/app/settings", label: "Micro-site" },
+            ...(isSuperAdmin ? [{ href: "/app/admin", label: "Painel global" }] : [])
+          ]}
+        />
 
         <section className="hero">
           <div>

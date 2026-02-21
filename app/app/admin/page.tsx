@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import PanelHeader from "@/app/components/PanelHeader";
 
 type Organization = {
   id: string;
@@ -132,11 +133,6 @@ export default function AdminPage() {
 
     load();
   }, []);
-
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    window.location.href = "/login";
-  }
 
   async function sendInviteEmail(organizationId: string, email: string) {
     const { data: sessionData } = await supabase.auth.getSession();
@@ -319,10 +315,11 @@ export default function AdminPage() {
     setDeletingId(orgId);
     setError(null);
 
-    const { error: deleteError } = await supabase
+    const { data: deletedRows, error: deleteError } = await supabase
       .from("organizations")
       .delete()
-      .eq("id", orgId);
+      .eq("id", orgId)
+      .select("id");
 
     setDeletingId(null);
 
@@ -333,6 +330,14 @@ export default function AdminPage() {
       return;
     }
 
+    if (!deletedRows || deletedRows.length === 0) {
+      setError(
+        "Nenhum cliente foi excluido. Verifique policy de DELETE na tabela organizations para super_admin."
+      );
+      return;
+    }
+
+    setOrganizations((prev) => prev.filter((item) => item.id !== orgId));
     await loadAdminData();
   }
 
@@ -350,15 +355,13 @@ export default function AdminPage() {
     return (
       <main>
         <div className="container">
-          <nav className="nav" style={{ marginBottom: 32 }}>
-            <div className="brand">TAP CHURCH</div>
-            <div className="nav-links">
-              <span>{email}</span>
-            </div>
-            <button className="btn btn-secondary" onClick={handleLogout}>
-              Sair
-            </button>
-          </nav>
+          <PanelHeader
+            navLinks={[
+              { href: "/app", label: "Painel" },
+              { href: "/app/admin", label: "Painel global" }
+            ]}
+            logoHref="/app/admin"
+          />
           <div className="card">
             <h3>Acesso negado</h3>
             <p>Esse painel e exclusivo para usuarios com role super_admin.</p>
@@ -372,16 +375,13 @@ export default function AdminPage() {
   return (
     <main>
       <div className="container">
-        <nav className="nav" style={{ marginBottom: 32 }}>
-          <div className="brand">TAP CHURCH GLOBAL</div>
-          <div className="nav-links">
-            <a href="/app">Painel igreja</a>
-            <a href="/app/admin">Painel global</a>
-          </div>
-          <button className="btn btn-secondary" onClick={handleLogout}>
-            Sair
-          </button>
-        </nav>
+        <PanelHeader
+          navLinks={[
+            { href: "/app", label: "Painel igreja" },
+            { href: "/app/admin", label: "Painel global" }
+          ]}
+          logoHref="/app/admin"
+        />
 
         <section className="hero">
           <div>
@@ -464,6 +464,7 @@ export default function AdminPage() {
 
         <section className="card" style={{ marginTop: 20 }}>
           <h3>Clientes cadastrados</h3>
+          {error ? <p style={{ color: "#b42318" }}>{error}</p> : null}
           {organizations.length === 0 ? (
             <p>Nenhuma organizacao cadastrada.</p>
           ) : (

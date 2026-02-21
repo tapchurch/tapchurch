@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import PanelHeader from "@/app/components/PanelHeader";
 
 type Organization = {
   id: string;
@@ -199,17 +200,16 @@ export default function SettingsPage() {
   return (
     <main>
       <div className="container">
-        <nav className="nav" style={{ marginBottom: 32 }}>
-          <div className="brand">{org?.name ?? "TAP CHURCH"}</div>
-          <div className="nav-links">
-            <a href="/app">Painel</a>
-            <a href="/app/locations">Localidades</a>
-            <a href="/app/tags">Tags</a>
-            <a href="/app/links">Links</a>
-            <a href="/app/team">Equipe</a>
-            <a href="/app/settings">Micro-site</a>
-          </div>
-        </nav>
+        <PanelHeader
+          navLinks={[
+            { href: "/app", label: "Painel" },
+            { href: "/app/locations", label: "Localidades" },
+            { href: "/app/tags", label: "Tags" },
+            { href: "/app/links", label: "Links" },
+            { href: "/app/team", label: "Equipe" },
+            { href: "/app/settings", label: "Micro-site" }
+          ]}
+        />
 
         <section className="hero">
           <div>

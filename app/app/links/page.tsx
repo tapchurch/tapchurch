@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import PanelHeader from "@/app/components/PanelHeader";
 
 type Organization = {
   id: string;
@@ -51,6 +52,8 @@ export default function LinksPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
+  const [schemaWarning, setSchemaWarning] = useState<string | null>(null);
+  const [hasIconUrlColumn, setHasIconUrlColumn] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const [title, setTitle] = useState("");
@@ -142,11 +145,41 @@ export default function LinksPage() {
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
 
+      if (linksError && linksError.message.includes("icon_url")) {
+        // Fallback temporario para bancos ainda sem a coluna icon_url.
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from("links")
+          .select(
+            "id, title, url, description, category, method, featured_type, sort_order, is_active"
+          )
+          .eq("location_id", selectedLocationId)
+          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: false });
+
+        if (fallbackError) {
+          setError("Nao foi possivel carregar links.");
+          return;
+        }
+
+        setHasIconUrlColumn(false);
+        setSchemaWarning(
+          "Banco sem coluna icon_url. Rode o SQL de atualizacao para habilitar icones."
+        );
+        setLinks(
+          (fallbackData ?? []).map((item) => ({
+            ...item,
+            icon_url: null
+          }))
+        );
+        return;
+      }
+
       if (linksError) {
         setError("Nao foi possivel carregar links.");
         return;
       }
 
+      setHasIconUrlColumn(true);
       setLinks(data ?? []);
     }
 
@@ -160,35 +193,66 @@ export default function LinksPage() {
     setSaving(true);
     setError(null);
 
-    const { error: insertError } = await supabase.from("links").insert({
+    const payload: Record<string, unknown> = {
       location_id: selectedLocationId,
       title,
       url: normalizeUrl(url),
       description: description || null,
-      icon_url: iconUrl || null,
       category,
       method: category === "payment" ? method : null,
       featured_type: featuredType,
       sort_order: Number.isNaN(Number(sortOrder)) ? 0 : Number(sortOrder),
       is_active: true
-    });
+    };
+    if (hasIconUrlColumn) payload.icon_url = iconUrl || null;
 
-    if (insertError) {
+    const { error: insertError } = await supabase.from("links").insert(payload);
+
+    if (insertError && insertError.message.includes("icon_url")) {
+      setHasIconUrlColumn(false);
+      setSchemaWarning(
+        "Banco sem coluna icon_url. Link salvo sem icone ate aplicar o SQL."
+      );
+      const { error: retryError } = await supabase.from("links").insert({
+        location_id: selectedLocationId,
+        title,
+        url: normalizeUrl(url),
+        description: description || null,
+        category,
+        method: category === "payment" ? method : null,
+        featured_type: featuredType,
+        sort_order: Number.isNaN(Number(sortOrder)) ? 0 : Number(sortOrder),
+        is_active: true
+      });
+      if (retryError) {
+        setError(retryError.message);
+        setSaving(false);
+        return;
+      }
+    } else if (insertError) {
       setError(insertError.message);
       setSaving(false);
       return;
     }
 
+    const selectColumns = hasIconUrlColumn
+      ? "id, title, url, description, icon_url, category, method, featured_type, sort_order, is_active"
+      : "id, title, url, description, category, method, featured_type, sort_order, is_active";
+
     const { data } = await supabase
       .from("links")
-      .select(
-        "id, title, url, description, icon_url, category, method, featured_type, sort_order, is_active"
-      )
+      .select(selectColumns as never)
       .eq("location_id", selectedLocationId)
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: false });
 
-    setLinks(data ?? []);
+    const normalizedData = (data as unknown as Record<string, unknown>[] | null) ?? [];
+    setLinks(
+      normalizedData.map((item) => ({
+        ...item,
+        icon_url: "icon_url" in item ? (item.icon_url as string | null) : null
+      })) as LinkItem[]
+    );
     setTitle("");
     setUrl("");
     setDescription("");
@@ -263,21 +327,45 @@ export default function LinksPage() {
     setSaving(true);
     setError(null);
 
+    const updatePayload: Record<string, unknown> = {
+      title: editTitle,
+      url: normalizeUrl(editUrl),
+      description: editDescription || null,
+      category: editCategory,
+      method: editCategory === "payment" ? editMethod : null,
+      featured_type: editFeaturedType,
+      sort_order: Number.isNaN(Number(editSortOrder)) ? 0 : Number(editSortOrder)
+    };
+    if (hasIconUrlColumn) updatePayload.icon_url = editIconUrl || null;
+
     const { error: updateError } = await supabase
       .from("links")
-      .update({
-        title: editTitle,
-        url: normalizeUrl(editUrl),
-        description: editDescription || null,
-        icon_url: editIconUrl || null,
-        category: editCategory,
-        method: editCategory === "payment" ? editMethod : null,
-        featured_type: editFeaturedType,
-        sort_order: Number.isNaN(Number(editSortOrder)) ? 0 : Number(editSortOrder)
-      })
+      .update(updatePayload)
       .eq("id", editingId);
 
-    if (updateError) {
+    if (updateError && updateError.message.includes("icon_url")) {
+      setHasIconUrlColumn(false);
+      setSchemaWarning(
+        "Banco sem coluna icon_url. Edicao salva sem icone ate aplicar o SQL."
+      );
+      const { error: retryUpdateError } = await supabase
+        .from("links")
+        .update({
+          title: editTitle,
+          url: normalizeUrl(editUrl),
+          description: editDescription || null,
+          category: editCategory,
+          method: editCategory === "payment" ? editMethod : null,
+          featured_type: editFeaturedType,
+          sort_order: Number.isNaN(Number(editSortOrder)) ? 0 : Number(editSortOrder)
+        })
+        .eq("id", editingId);
+      if (retryUpdateError) {
+        setError(retryUpdateError.message);
+        setSaving(false);
+        return;
+      }
+    } else if (updateError) {
       setError(updateError.message);
       setSaving(false);
       return;
@@ -335,17 +423,16 @@ export default function LinksPage() {
   return (
     <main>
       <div className="container">
-        <nav className="nav" style={{ marginBottom: 32 }}>
-          <div className="brand">{org?.name ?? "TAP CHURCH"}</div>
-          <div className="nav-links">
-            <a href="/app">Painel</a>
-            <a href="/app/locations">Localidades</a>
-            <a href="/app/tags">Tags</a>
-            <a href="/app/links">Links</a>
-            <a href="/app/team">Equipe</a>
-            <a href="/app/settings">Micro-site</a>
-          </div>
-        </nav>
+        <PanelHeader
+          navLinks={[
+            { href: "/app", label: "Painel" },
+            { href: "/app/locations", label: "Localidades" },
+            { href: "/app/tags", label: "Tags" },
+            { href: "/app/links", label: "Links" },
+            { href: "/app/team", label: "Equipe" },
+            { href: "/app/settings", label: "Micro-site" }
+          ]}
+        />
 
         <section className="hero">
           <div>
@@ -394,9 +481,9 @@ export default function LinksPage() {
                   gap: 8
                 }}
               >
-                <span style={{ color: "var(--muted)", fontSize: 12 }}>
-                  URL publica: /go/{org?.slug}/{selectedLocation.slug}
-                </span>
+                  <span style={{ color: "var(--muted)", fontSize: 12 }}>
+                    URL publica: /go/{org?.slug}/{selectedLocation.slug}
+                  </span>
                 <div className="nav-actions">
                   <button
                     type="button"
@@ -409,6 +496,20 @@ export default function LinksPage() {
                     <span style={{ color: "var(--muted)", fontSize: 13 }}>{copyMessage}</span>
                   ) : null}
                 </div>
+              </div>
+            ) : null}
+            {schemaWarning ? (
+              <div
+                style={{
+                  marginTop: 10,
+                  border: "1px solid #f2b8b5",
+                  borderRadius: 10,
+                  padding: 10,
+                  color: "#8a1f17",
+                  background: "#fff5f4"
+                }}
+              >
+                {schemaWarning}
               </div>
             ) : null}
           </div>
@@ -466,34 +567,38 @@ export default function LinksPage() {
                   }}
                 />
               </label>
-              <label style={{ display: "grid", gap: 6 }}>
-                Icone (opcional)
-                <input
-                  type="url"
-                  value={iconUrl}
-                  onChange={(event) => setIconUrl(event.target.value)}
-                  placeholder="https://.../icon-16.png"
-                  style={{
-                    padding: "12px 14px",
-                    borderRadius: 12,
-                    border: "1px solid var(--stroke)",
-                    background: "#ffffff",
-                    color: "var(--ink)"
-                  }}
-                />
-              </label>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {ICON_PRESETS.map((preset) => (
-                  <button
-                    key={preset.label}
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setIconUrl(preset.url)}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
+              {hasIconUrlColumn ? (
+                <>
+                  <label style={{ display: "grid", gap: 6 }}>
+                    Icone (opcional)
+                    <input
+                      type="url"
+                      value={iconUrl}
+                      onChange={(event) => setIconUrl(event.target.value)}
+                      placeholder="https://.../icon-16.png"
+                      style={{
+                        padding: "12px 14px",
+                        borderRadius: 12,
+                        border: "1px solid var(--stroke)",
+                        background: "#ffffff",
+                        color: "var(--ink)"
+                      }}
+                    />
+                  </label>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    {ICON_PRESETS.map((preset) => (
+                      <button
+                        key={preset.label}
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() => setIconUrl(preset.url)}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : null}
               <label style={{ display: "grid", gap: 6 }}>
                 Tipo de link
                 <select
@@ -651,34 +756,38 @@ export default function LinksPage() {
                             }}
                           />
                         </label>
-                        <label style={{ display: "grid", gap: 6 }}>
-                          Icone (opcional)
-                          <input
-                            type="url"
-                            value={editIconUrl}
-                            onChange={(event) => setEditIconUrl(event.target.value)}
-                            placeholder="https://.../icon-16.png"
-                            style={{
-                              padding: "10px 12px",
-                              borderRadius: 12,
-                              border: "1px solid var(--stroke)",
-                              background: "#ffffff",
-                              color: "var(--ink)"
-                            }}
-                          />
-                        </label>
-                        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                          {ICON_PRESETS.map((preset) => (
-                            <button
-                              key={preset.label}
-                              type="button"
-                              className="btn btn-secondary"
-                              onClick={() => setEditIconUrl(preset.url)}
-                            >
-                              {preset.label}
-                            </button>
-                          ))}
-                        </div>
+                        {hasIconUrlColumn ? (
+                          <>
+                            <label style={{ display: "grid", gap: 6 }}>
+                              Icone (opcional)
+                              <input
+                                type="url"
+                                value={editIconUrl}
+                                onChange={(event) => setEditIconUrl(event.target.value)}
+                                placeholder="https://.../icon-16.png"
+                                style={{
+                                  padding: "10px 12px",
+                                  borderRadius: 12,
+                                  border: "1px solid var(--stroke)",
+                                  background: "#ffffff",
+                                  color: "var(--ink)"
+                                }}
+                              />
+                            </label>
+                            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                              {ICON_PRESETS.map((preset) => (
+                                <button
+                                  key={preset.label}
+                                  type="button"
+                                  className="btn btn-secondary"
+                                  onClick={() => setEditIconUrl(preset.url)}
+                                >
+                                  {preset.label}
+                                </button>
+                              ))}
+                            </div>
+                          </>
+                        ) : null}
                         <label style={{ display: "grid", gap: 6 }}>
                           Tipo de link
                           <select
