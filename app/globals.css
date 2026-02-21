@@ -504,17 +504,39 @@ main {
     width: 100%;
   }
 
-  .nav.nav-home .nav-links,
-  .nav.nav-home .btn,
-  .nav.nav-home .lang-switch {
+  .nav.nav-home {
+    align-items: stretch;
+    border-radius: 28px;
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .nav.nav-home .nav-links {
     width: 100%;
     justify-content: center;
     text-align: center;
+    font-size: 13px;
+    gap: 10px 18px;
+  }
+
+  .nav.nav-home .lang-switch {
+    width: fit-content;
+    margin: 0 auto;
   }
 
   .nav.nav-home .nav-actions {
     width: 100%;
     justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .nav.nav-home .nav-actions .btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 12px 14px;
   }
 
   .nav-links {

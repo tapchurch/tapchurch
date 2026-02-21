@@ -257,9 +257,6 @@ export default function HomePage() {
             <a className="btn btn-secondary" href="#plataforma">
               {t.hero.cta2}
             </a>
-            <a className="btn btn-secondary" href="/login">
-              {t.hero.cta3}
-            </a>
             <a className="btn btn-primary" href="/signup">
               {t.hero.cta4}
             </a>
