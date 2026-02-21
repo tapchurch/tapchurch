@@ -9,7 +9,7 @@ const copy = {
     nav: {
       how: "Como funciona",
       platform: "Plataforma",
-      pricing: "Precos",
+      pricing: "Preços",
       contact: "Contato",
       login: "Entrar",
       demo: "Agendar demo",
@@ -18,8 +18,6 @@ const copy = {
     hero: {
       title: "Um TAP para comunicar, ofertar e conectar.",
       desc: "O TAP CHURCH entrega a tag, o micro site e o painel para sua igreja atualizar tudo em minutos. O membro aproxima o celular e acessa avisos, ofertas e links oficiais.",
-      slideTitle: "Comunicacao e ofertas em um toque",
-      slideDesc: "Aproxime o celular e abra os links oficiais da igreja.",
       cta1: "Quero implementar",
       cta2: "Ver plataforma",
       cta3: "Painel admin",
@@ -33,52 +31,52 @@ const copy = {
       },
       {
         chip: "PIX + WALLET",
-        title: "Links e comunicacao",
-        text: "Pix, carteiras digitais, avisos e chamadas rapidas."
+        title: "Links e comunicação",
+        text: "Pix, carteiras digitais, avisos e chamadas rápidas."
       },
       {
         chip: "DASHBOARD",
         title: "Gerencie locais e links",
-        text: "Atualize tudo sem precisar de suporte tecnico."
+        text: "Atualize tudo sem precisar de suporte técnico."
       }
     ],
     how: {
-      title: "Como funciona",
-      sub: "A igreja recebe tags prontas, cola no local e ativa a pagina de ofertas. O membro aproxima o celular e escolhe Pix ou carteira digital.",
+      title: "Como Funciona",
+      sub: "A igreja recebe tags prontas, cola no local e ativa a página de ofertas. O membro aproxima o celular e escolhe Pix ou carteira digital.",
       cards: [
         ["1. Tag instalada", "Enviamos a tag com layout da igreja. Basta fixar e ativar no painel."],
-        ["2. Micro site", "Um link exclusivo com botoes de oferta, projetos e campanhas."],
+        ["2. Micro site", "Um link exclusivo com botões de oferta, projetos e campanhas."],
         ["3. Pagamento", "O membro escolhe Pix, Apple Pay ou Google Pay direto no celular."],
-        ["4. Gestao central", "O gestor controla varias localidades em uma unica conta."]
+        ["4. Gestão central", "O gestor controla várias localidades em uma única conta."]
       ]
     },
     platform: {
       title: "Plataforma feita para igrejas",
-      sub: "Voce nao precisa ser fintech. Cada igreja usa seus proprios links de pagamento, e o TAP CHURCH organiza tudo.",
+      sub: "Você não precisa ser fintech. Cada igreja usa seus próprios links de pagamento, e o TAP CHURCH organiza tudo.",
       cards: [
-        ["Links por localidade", "Sede e filiais com paginas diferentes e organizadas por campanha."],
-        ["Painel simples", "Troque links, textos e ordem dos botoes em segundos."],
-        ["Equipe com acesso", "Administradores e gestores com permissoes por localidade."],
-        ["Ativacao rapida", "Assim que a tag chega, a igreja ja consegue ativar sozinha."]
+        ["Links por localidade", "Sede e filiais com páginas diferentes e organizadas por campanha."],
+        ["Painel simples", "Troque links, textos e ordem dos botões em segundos."],
+        ["Equipe com acesso", "Administradores e gestores com permissões por localidade."],
+        ["Ativação rápida", "Assim que a tag chega, a igreja já consegue ativar sozinha."]
       ]
     },
     pricing: {
-      title: "Modelo de cobranca claro",
+      title: "Modelo de cobrança claro",
       sub: "Mensalidade por igreja e valor por tag. Sem taxas em cima das ofertas.",
       cards: [
-        ["Plano plataforma", "Mensalidade por igreja", "Acesso ao painel, micro site, suporte e atualizacoes."],
-        ["Tags NFC", "Tag personalizada", "Unidade com layout da igreja e configuracao pronta."],
-        ["Tags NFC", "Tag sem personalizacao", "Opcao economica para expansao rapida de cadeiras ou entradas."]
+        ["Plano plataforma", "Mensalidade por igreja", "Acesso ao painel, micro site, suporte e atualizações."],
+        ["Tags NFC", "Tag personalizada", "Unidade com layout da igreja e configuração pronta."],
+        ["Tags NFC", "Tag sem personalização", "Opção econômica para expansão rápida de cadeiras ou entradas."]
       ]
     },
     contact: {
       title: "Vamos colocar sua igreja no ar",
-      sub: "Responda com nome da igreja, quantidade de locais e numero de tags.",
+      sub: "Responda com nome da igreja, quantidade de locais e número de tags.",
       talk: "Falar com a equipe"
     },
     footer: {
-      l1: "Plataforma de ofertas por aproximacao para igrejas.",
-      l2: "Pix, Apple Pay e Google Pay por links proprios da igreja."
+      l1: "Plataforma de ofertas por aproximação para igrejas.",
+      l2: "Pix, Apple Pay e Google Pay por links próprios da igreja."
     }
   },
   en: {
@@ -94,8 +92,6 @@ const copy = {
     hero: {
       title: "One TAP to communicate, give, and connect.",
       desc: "TAP CHURCH delivers NFC tags, public pages, and a dashboard so churches can update everything in minutes.",
-      slideTitle: "Communication and giving in one tap",
-      slideDesc: "Tap with your phone and open official church links.",
       cta1: "I want this",
       cta2: "See platform",
       cta3: "Admin panel",
@@ -302,13 +298,11 @@ export default function HomePage() {
           </div>
         </div>
         <div className="hero-card">
-          <div className="landing-hero-slide">
-            <div className="landing-hero-overlay">
-              <span className="badge">TAP CHURCH</span>
-              <h3>{t.hero.slideTitle}</h3>
-              <p>{t.hero.slideDesc}</p>
-            </div>
-          </div>
+          <img
+            src="/tapchurch-hero.png"
+            alt="Exemplo visual TAP Church"
+            className="landing-hero-image"
+          />
           {t.tagCards.map((card) => (
             <div className="tag-preview" key={card.title}>
               <div className="tag-chip">{card.chip}</div>
