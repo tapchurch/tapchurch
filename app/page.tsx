@@ -1,181 +1,304 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+type Lang = "pt" | "en";
+
+const copy = {
+  pt: {
+    nav: {
+      how: "Como funciona",
+      platform: "Plataforma",
+      pricing: "Precos",
+      contact: "Contato",
+      login: "Entrar",
+      demo: "Agendar demo",
+      panel: "Entrar no painel"
+    },
+    hero: {
+      title: "Um TAP para comunicar, ofertar e conectar.",
+      desc: "O TAP CHURCH entrega a tag, o micro site e o painel para sua igreja atualizar tudo em minutos. O membro aproxima o celular e acessa avisos, ofertas e links oficiais.",
+      cta1: "Quero implementar",
+      cta2: "Ver plataforma",
+      cta3: "Painel admin",
+      cta4: "Criar conta"
+    },
+    tagCards: [
+      {
+        chip: "TAP CHURCH",
+        title: "Tag NFC personalizada",
+        text: "Fixada nas cadeiras, mesas ou entradas."
+      },
+      {
+        chip: "PIX + WALLET",
+        title: "Links e comunicacao",
+        text: "Pix, carteiras digitais, avisos e chamadas rapidas."
+      },
+      {
+        chip: "DASHBOARD",
+        title: "Gerencie locais e links",
+        text: "Atualize tudo sem precisar de suporte tecnico."
+      }
+    ],
+    how: {
+      title: "Como funciona",
+      sub: "A igreja recebe tags prontas, cola no local e ativa a pagina de ofertas. O membro aproxima o celular e escolhe Pix ou carteira digital.",
+      cards: [
+        ["1. Tag instalada", "Enviamos a tag com layout da igreja. Basta fixar e ativar no painel."],
+        ["2. Micro site", "Um link exclusivo com botoes de oferta, projetos e campanhas."],
+        ["3. Pagamento", "O membro escolhe Pix, Apple Pay ou Google Pay direto no celular."],
+        ["4. Gestao central", "O gestor controla varias localidades em uma unica conta."]
+      ]
+    },
+    platform: {
+      title: "Plataforma feita para igrejas",
+      sub: "Voce nao precisa ser fintech. Cada igreja usa seus proprios links de pagamento, e o TAP CHURCH organiza tudo.",
+      cards: [
+        ["Links por localidade", "Sede e filiais com paginas diferentes e organizadas por campanha."],
+        ["Painel simples", "Troque links, textos e ordem dos botoes em segundos."],
+        ["Equipe com acesso", "Administradores e gestores com permissoes por localidade."],
+        ["Ativacao rapida", "Assim que a tag chega, a igreja ja consegue ativar sozinha."]
+      ]
+    },
+    pricing: {
+      title: "Modelo de cobranca claro",
+      sub: "Mensalidade por igreja e valor por tag. Sem taxas em cima das ofertas.",
+      cards: [
+        ["Plano plataforma", "Mensalidade por igreja", "Acesso ao painel, micro site, suporte e atualizacoes."],
+        ["Tags NFC", "Tag personalizada", "Unidade com layout da igreja e configuracao pronta."],
+        ["Tags NFC", "Tag sem personalizacao", "Opcao economica para expansao rapida de cadeiras ou entradas."]
+      ]
+    },
+    contact: {
+      title: "Vamos colocar sua igreja no ar",
+      sub: "Responda com nome da igreja, quantidade de locais e numero de tags.",
+      talk: "Falar com a equipe"
+    },
+    footer: {
+      l1: "Plataforma de ofertas por aproximacao para igrejas.",
+      l2: "Pix, Apple Pay e Google Pay por links proprios da igreja."
+    }
+  },
+  en: {
+    nav: {
+      how: "How it works",
+      platform: "Platform",
+      pricing: "Pricing",
+      contact: "Contact",
+      login: "Login",
+      demo: "Book demo",
+      panel: "Go to dashboard"
+    },
+    hero: {
+      title: "One TAP to communicate, give, and connect.",
+      desc: "TAP CHURCH delivers NFC tags, public pages, and a dashboard so churches can update everything in minutes.",
+      cta1: "I want this",
+      cta2: "See platform",
+      cta3: "Admin panel",
+      cta4: "Create account"
+    },
+    tagCards: [
+      {
+        chip: "TAP CHURCH",
+        title: "Custom NFC tag",
+        text: "Placed on seats, tables, or entry points."
+      },
+      {
+        chip: "PIX + WALLET",
+        title: "Links and communication",
+        text: "Pix, digital wallets, announcements, and quick actions."
+      },
+      {
+        chip: "DASHBOARD",
+        title: "Manage locations and links",
+        text: "Update everything without technical support."
+      }
+    ],
+    how: {
+      title: "How it works",
+      sub: "The church receives ready-to-use tags, installs them, and activates links. Members tap and choose the payment option.",
+      cards: [
+        ["1. Tag installed", "We ship tags with church branding. Just place and activate."],
+        ["2. Public page", "Each location has its own page and key buttons."],
+        ["3. Payment", "Members choose Pix, Apple Pay, or Google Pay on mobile."],
+        ["4. Central management", "Manage multiple locations under one account."]
+      ]
+    },
+    platform: {
+      title: "Built for churches",
+      sub: "You are not a fintech. Each church uses its own payment links and TAP CHURCH organizes the experience.",
+      cards: [
+        ["Links by location", "Main campus and branches with separate pages."],
+        ["Simple dashboard", "Change links and content in seconds."],
+        ["Team access", "Admins and editors with role-based access."],
+        ["Fast activation", "Churches can activate as soon as tags arrive."]
+      ]
+    },
+    pricing: {
+      title: "Clear pricing model",
+      sub: "Monthly platform fee plus NFC tags. No fee on church donations.",
+      cards: [
+        ["Platform plan", "Monthly per church", "Dashboard access, page hosting, support, and updates."],
+        ["NFC Tags", "Custom tag", "Ready-to-use units with church branding."],
+        ["NFC Tags", "Standard tag", "Lower-cost option for fast expansion."]
+      ]
+    },
+    contact: {
+      title: "Let us launch your church setup",
+      sub: "Send your church name, number of locations, and expected number of tags.",
+      talk: "Talk to sales"
+    },
+    footer: {
+      l1: "Tap-based giving and communication platform for churches.",
+      l2: "Pix, Apple Pay, and Google Pay with church-owned links."
+    }
+  }
+} as const;
+
 export default function HomePage() {
+  const [lang, setLang] = useState<Lang>("pt");
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("tapchurch_lang");
+    if (stored === "pt" || stored === "en") setLang(stored);
+  }, []);
+
+  function changeLanguage(nextLang: Lang) {
+    setLang(nextLang);
+    window.localStorage.setItem("tapchurch_lang", nextLang);
+  }
+
+  const t = copy[lang];
+
+  const NfcIcon = ({ size = 18 }: { size?: number }) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path d="M5 4C7.5 6.5 7.5 17.5 5 20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M9 7C10.5 8.8 10.5 15.2 9 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M13 9.5C13.9 10.6 13.9 13.4 13 14.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M18 9V15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+
   return (
     <main>
       <div className="container">
         <nav className="nav nav-home">
           <div className="home-brand">
-            <img
-              src="/tapchurch.png"
-              alt="TAP CHURCH"
-              style={{ width: 150, height: 44, objectFit: "contain" }}
-            />
+            <img src="/tapchurch.png" alt="TAP CHURCH" style={{ width: 150, height: 44, objectFit: "contain" }} />
           </div>
           <div className="nav-links">
-            <a href="#como-funciona">Como funciona</a>
-            <a href="#plataforma">Plataforma</a>
-            <a href="#precos">Precos</a>
-            <a href="#contato">Contato</a>
-            <a href="/login">Entrar</a>
+            <a href="#como-funciona">{t.nav.how}</a>
+            <a href="#plataforma">{t.nav.platform}</a>
+            <a href="#precos">{t.nav.pricing}</a>
+            <a href="#contato">{t.nav.contact}</a>
+            <a href="/login">{t.nav.login}</a>
+          </div>
+          <div className="nav-actions">
+            <button type="button" className={`btn ${lang === "pt" ? "btn-primary" : "btn-secondary"}`} onClick={() => changeLanguage("pt")}>
+              PT-BR
+            </button>
+            <button type="button" className={`btn ${lang === "en" ? "btn-primary" : "btn-secondary"}`} onClick={() => changeLanguage("en")}>
+              EN
+            </button>
           </div>
           <a className="btn btn-secondary" href="#contato">
-            Agendar demo
+            {t.nav.demo}
           </a>
           <a className="btn btn-primary" href="/login">
-            Entrar no painel
+            {t.nav.panel}
           </a>
         </nav>
       </div>
 
       <section className="container hero">
         <div>
-          <h1>Um TAP para comunicar, ofertar e conectar.</h1>
-          <p>
-            O TAP CHURCH entrega a tag, o micro site e o painel para sua igreja
-            atualizar tudo em minutos. O membro aproxima o celular e acessa
-            avisos, ofertas e links oficiais.
-          </p>
+          <h1>{t.hero.title}</h1>
+          <p>{t.hero.desc}</p>
           <div className="hero-actions">
             <a className="btn btn-primary" href="#contato">
-              Quero implementar
+              {t.hero.cta1}
             </a>
             <a className="btn btn-secondary" href="#plataforma">
-              Ver plataforma
+              {t.hero.cta2}
             </a>
             <a className="btn btn-secondary" href="/login">
-              Painel admin
+              {t.hero.cta3}
             </a>
             <a className="btn btn-primary" href="/signup">
-              Criar conta
+              {t.hero.cta4}
             </a>
           </div>
         </div>
         <div className="hero-card">
-          <div className="tag-preview">
-            <div className="tag-chip">TAP CHURCH</div>
-            <strong>Tag NFC personalizada</strong>
-            <span>Fixada nas cadeiras, mesas ou entradas.</span>
-          </div>
-          <div className="tag-preview">
-            <div className="tag-chip">PIX + WALLET</div>
-            <strong>Links e comunicacao</strong>
-            <span>Pix, carteiras digitais, avisos e chamadas rápidas.</span>
-          </div>
-          <div className="tag-preview">
-            <div className="tag-chip">DASHBOARD</div>
-            <strong>Gerencie locais e links</strong>
-            <span>Atualize tudo sem precisar de suporte tecnico.</span>
-          </div>
+          {t.tagCards.map((card) => (
+            <div className="tag-preview" key={card.title}>
+              <div className="tag-chip">{card.chip}</div>
+              <strong className="icon-title">
+                <NfcIcon />
+                {card.title}
+              </strong>
+              <span>{card.text}</span>
+            </div>
+          ))}
         </div>
       </section>
 
       <section className="container" id="como-funciona">
-        <h2 className="section-title">Como funciona</h2>
-        <p className="section-sub">
-          A igreja recebe tags prontas, cola no local e ativa a pagina de
-          ofertas. O membro aproxima o celular e escolhe Pix ou carteira
-          digital.
-        </p>
+        <h2 className="section-title">{t.how.title}</h2>
+        <p className="section-sub">{t.how.sub}</p>
         <div className="grid">
-          <div className="card">
-            <h3>1. Tag instalada</h3>
-            <p>
-              Enviamos a tag com layout da igreja. Basta fixar e ativar no
-              painel.
-            </p>
-          </div>
-          <div className="card">
-            <h3>2. Micro site</h3>
-            <p>
-              Um link exclusivo com botoes de oferta, projetos e campanhas.
-            </p>
-          </div>
-          <div className="card">
-            <h3>3. Pagamento</h3>
-            <p>
-              O membro escolhe Pix, Apple Pay ou Google Pay direto no celular.
-            </p>
-          </div>
-          <div className="card">
-            <h3>4. Gestao central</h3>
-            <p>
-              O gestor controla varias localidades em uma unica conta.
-            </p>
-          </div>
+          {t.how.cards.map(([title, text]) => (
+            <div className="card" key={title}>
+              <h3 className="icon-title">
+                {title.startsWith("1.") ? <NfcIcon /> : null}
+                {title}
+              </h3>
+              <p>{text}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       <section className="container" id="plataforma">
-        <h2 className="section-title">Plataforma feita para igrejas</h2>
-        <p className="section-sub">
-          Voce nao precisa ser fintech. Cada igreja usa seus proprios links de
-          pagamento, e o TAP CHURCH organiza tudo.
-        </p>
+        <h2 className="section-title">{t.platform.title}</h2>
+        <p className="section-sub">{t.platform.sub}</p>
         <div className="grid">
-          <div className="card">
-            <h3>Links por localidade</h3>
-            <p>
-              Sede e filiais com paginas diferentes e organizadas por campanha.
-            </p>
-          </div>
-          <div className="card">
-            <h3>Painel simples</h3>
-            <p>
-              Troque links, textos e ordem dos botoes em segundos.
-            </p>
-          </div>
-          <div className="card">
-            <h3>Equipe com acesso</h3>
-            <p>
-              Administradores e gestores com permissoes por localidade.
-            </p>
-          </div>
-          <div className="card">
-            <h3>Ativacao rapida</h3>
-            <p>
-              Assim que a tag chega, a igreja ja consegue ativar sozinha.
-            </p>
-          </div>
+          {t.platform.cards.map(([title, text]) => (
+            <div className="card" key={title}>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       <section className="container" id="precos">
-        <h2 className="section-title">Modelo de cobranca claro</h2>
-        <p className="section-sub">
-          Mensalidade por igreja e valor por tag. Sem taxas em cima das ofertas.
-        </p>
+        <h2 className="section-title">{t.pricing.title}</h2>
+        <p className="section-sub">{t.pricing.sub}</p>
         <div className="pricing">
-          <div className="pricing-card">
-            <span className="badge">Plano plataforma</span>
-            <h3>Mensalidade por igreja</h3>
-            <p>
-              Acesso ao painel, micro site, suporte e atualizacoes.
-            </p>
-          </div>
-          <div className="pricing-card">
-            <span className="badge">Tags NFC</span>
-            <h3>Tag personalizada</h3>
-            <p>
-              Unidade com layout da igreja e configuracao pronta.
-            </p>
-          </div>
-          <div className="pricing-card">
-            <span className="badge">Tags NFC</span>
-            <h3>Tag sem personalizacao</h3>
-            <p>
-              Opcao economica para expansao rapida de cadeiras ou entradas.
-            </p>
-          </div>
+          {t.pricing.cards.map(([badge, title, text]) => (
+            <div className="pricing-card" key={title}>
+              <span className="badge">{badge}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       <section className="container" id="contato">
-        <h2 className="section-title">Vamos colocar sua igreja no ar</h2>
-        <p className="section-sub">
-          Responda com nome da igreja, quantidade de locais e numero de tags.
-        </p>
+        <h2 className="section-title">{t.contact.title}</h2>
+        <p className="section-sub">{t.contact.sub}</p>
         <div className="hero-actions">
           <a className="btn btn-primary" href="mailto:comercial@tapchurch.com.br">
-            Falar com a equipe
+            {t.contact.talk}
           </a>
           <a className="btn btn-secondary" href="https://wa.me/5534984059374">
             WhatsApp
@@ -185,15 +308,11 @@ export default function HomePage() {
 
       <div className="container footer">
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <img
-            src="/tapchurch.png"
-            alt="TAP CHURCH"
-            style={{ width: 24, height: 24, objectFit: "contain" }}
-          />
+          <img src="/tapchurch.png" alt="TAP CHURCH" style={{ width: 24, height: 24, objectFit: "contain" }} />
           <strong>TAP CHURCH</strong>
         </div>
-        <span>Plataforma de ofertas por aproximacao para igrejas.</span>
-        <span>Pix, Apple Pay e Google Pay por links proprios da igreja.</span>
+        <span>{t.footer.l1}</span>
+        <span>{t.footer.l2}</span>
         <span>comercial@tapchurch.com.br · WhatsApp 34 98405-9374</span>
       </div>
     </main>
