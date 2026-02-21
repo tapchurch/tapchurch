@@ -250,8 +250,8 @@ export default function HomePage() {
           <div className="nav-links">
             <a href="#como-funciona">{t.nav.how}</a>
             <a href="#plataforma">{t.nav.platform}</a>
-            <a href="#precos">{t.nav.pricing}</a>
-            <a href="#contato">{t.nav.contact}</a>
+            <a href="/precos">{t.nav.pricing}</a>
+            <a href="/contato">{t.nav.contact}</a>
             <a href="/login">{t.nav.login}</a>
           </div>
           <div className="lang-switch" role="tablist" aria-label="Selecionar idioma">
@@ -271,7 +271,7 @@ export default function HomePage() {
             </button>
           </div>
           <div className="nav-actions">
-            <a className="btn btn-secondary" href="#contato">
+            <a className="btn btn-secondary" href="/contato">
               {t.nav.demo}
             </a>
             <a className="btn btn-primary" href="/login">
@@ -286,10 +286,10 @@ export default function HomePage() {
           <h1>{t.hero.title}</h1>
           <p>{t.hero.desc}</p>
           <div className="hero-actions">
-            <a className="btn btn-primary" href="#contato">
+            <a className="btn btn-primary" href="/contato">
               {t.hero.cta1}
             </a>
-            <a className="btn btn-secondary" href="#plataforma">
+            <a className="btn btn-secondary" href="/precos">
               {t.hero.cta2}
             </a>
             <a className="btn btn-primary" href="/signup">
@@ -406,6 +406,9 @@ export default function HomePage() {
           </a>
           <a className="btn btn-secondary" href="https://wa.me/5534984059374">
             WhatsApp
+          </a>
+          <a className="btn btn-secondary" href="/contato">
+            Formulário completo
           </a>
         </div>
       </section>

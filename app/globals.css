@@ -497,6 +497,36 @@ main {
   font-size: 13px;
 }
 
+.contact-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.contact-field {
+  display: grid;
+  gap: 6px;
+}
+
+.pricing-table {
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.pricing-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--stroke);
+}
+
+.pricing-row.total {
+  background: rgba(14, 165, 166, 0.08);
+  border-bottom: 0;
+}
+
 @media (max-width: 720px) {
   .nav {
     flex-direction: column;
@@ -564,6 +594,10 @@ main {
   }
 
   .admin-org-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-grid {
     grid-template-columns: 1fr;
   }
 }
