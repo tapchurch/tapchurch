@@ -32,6 +32,21 @@ export default function LoginPage() {
   return (
     <main>
       <div className="container">
+        <nav className="nav nav-home" style={{ marginBottom: 20 }}>
+          <a className="home-brand" href="/" aria-label="Ir para a página inicial">
+            <img
+              src="/tapchurch.png"
+              alt="TAP CHURCH"
+              style={{ width: 150, height: 44, objectFit: "contain" }}
+            />
+          </a>
+          <div className="nav-links">
+            <a href="/precos">Preços</a>
+            <a href="/contato">Contato</a>
+            <a href="/signup">Criar conta</a>
+          </div>
+        </nav>
+
         <section className="hero" style={{ marginTop: 48 }}>
           <div>
             <h1>Entrar no painel</h1>
@@ -39,6 +54,12 @@ export default function LoginPage() {
               Acesse com o e-mail da igreja para gerenciar localidades, tags e
               links de pagamento.
             </p>
+            <div className="card" style={{ marginTop: 16, minHeight: "unset" }}>
+              <h3>Antes de entrar</h3>
+              <p>Use o e-mail principal vinculado à sua organização.</p>
+              <p>Se for seu primeiro acesso, confirme o e-mail recebido.</p>
+              <p>Suporte comercial: comercial@tapchurch.com.br</p>
+            </div>
           </div>
           <div className="hero-card">
             <form onSubmit={handleLogin} style={{ display: "grid", gap: 12 }}>
@@ -92,12 +113,13 @@ export default function LoginPage() {
                   </button>
                 </div>
               </label>
-              {error ? (
-                <span style={{ color: "#f2a1a1" }}>{error}</span>
-              ) : null}
+              {error ? <span style={{ color: "#b42318" }}>{error}</span> : null}
               <button className="btn btn-primary" type="submit" disabled={loading}>
                 {loading ? "Entrando..." : "Entrar"}
               </button>
+              <a href="/signup" style={{ color: "var(--muted)" }}>
+                Ainda não tenho conta
+              </a>
             </form>
           </div>
         </section>

@@ -40,10 +40,31 @@ export default function SignupPage() {
   return (
     <main>
       <div className="container">
+        <nav className="nav nav-home" style={{ marginBottom: 20 }}>
+          <a className="home-brand" href="/" aria-label="Ir para a página inicial">
+            <img
+              src="/tapchurch.png"
+              alt="TAP CHURCH"
+              style={{ width: 150, height: 44, objectFit: "contain" }}
+            />
+          </a>
+          <div className="nav-links">
+            <a href="/precos">Preços</a>
+            <a href="/contato">Contato</a>
+            <a href="/login">Entrar</a>
+          </div>
+        </nav>
+
         <section className="hero" style={{ marginTop: 48 }}>
           <div>
             <h1>Criar conta</h1>
             <p>Crie seu acesso para configurar a igreja e escolher o plano.</p>
+            <div className="card" style={{ marginTop: 16, minHeight: "unset" }}>
+              <h3>Fluxo de ativação</h3>
+              <p>1. Cadastre seus dados básicos.</p>
+              <p>2. Confirme o e-mail enviado pela plataforma.</p>
+              <p>3. Configure sua igreja e publique os links.</p>
+            </div>
           </div>
           <div className="hero-card">
             <form onSubmit={handleSignup} style={{ display: "grid", gap: 12 }}>
@@ -130,14 +151,12 @@ export default function SignupPage() {
                   </button>
                 </div>
               </label>
-              {error ? (
-                <span style={{ color: "#f2a1a1" }}>{error}</span>
-              ) : null}
+              {error ? <span style={{ color: "#b42318" }}>{error}</span> : null}
               <button className="btn btn-primary" type="submit" disabled={loading}>
                 {loading ? "Criando..." : "Criar conta"}
               </button>
               <a href="/login" style={{ color: "var(--muted)" }}>
-                Ja tenho conta
+                Já tenho conta
               </a>
             </form>
           </div>
