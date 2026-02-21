@@ -205,6 +205,41 @@ export default function HomePage() {
     </svg>
   );
 
+  const SparkIcon = ({ size = 18 }: { size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 3L13.8 8.2L19 10L13.8 11.8L12 17L10.2 11.8L5 10L10.2 8.2L12 3Z" fill="currentColor" />
+    </svg>
+  );
+
+  const LinkIcon = ({ size = 18 }: { size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M10 14L14 10M8 16L6 18C4.3 19.7 1.7 19.7 0 18C-1.7 16.3 -1.7 13.7 0 12L2 10M16 8L18 6C19.7 4.3 22.3 4.3 24 6C25.7 7.7 25.7 10.3 24 12L22 14" transform="translate(0 0)" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    </svg>
+  );
+
+  const WalletIcon = ({ size = 18 }: { size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="5.5" width="19" height="13" rx="3" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M15 12H21.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="16.5" cy="12" r="1.2" fill="currentColor" />
+    </svg>
+  );
+
+  const TeamIcon = ({ size = 18 }: { size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="8" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="16.5" cy="10" r="2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M3.5 18.5C4.2 16.3 5.8 15 8 15C10.2 15 11.8 16.3 12.5 18.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M14 18.5C14.5 17 15.5 16.2 16.8 16.2C18.1 16.2 19.1 17 19.6 18.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+
+  const BoltIcon = ({ size = 18 }: { size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M13 2L5 13H11L9.8 22L19 10.5H13.2L13 2Z" fill="currentColor" />
+    </svg>
+  );
+
   return (
     <main>
       <div className="container">
@@ -263,6 +298,11 @@ export default function HomePage() {
           </div>
         </div>
         <div className="hero-card">
+          <img
+            src="/tapchurch-hero.png"
+            alt="Exemplo visual TAP Church"
+            className="landing-hero-image"
+          />
           {t.tagCards.map((card) => (
             <div className="tag-preview" key={card.title}>
               <div className="tag-chip">{card.chip}</div>
@@ -277,7 +317,10 @@ export default function HomePage() {
       </section>
 
       <section className="container" id="como-funciona">
-        <h2 className="section-title">{t.how.title}</h2>
+        <h2 className="section-title icon-title">
+          <SparkIcon size={20} />
+          {t.how.title}
+        </h2>
         <p className="section-sub">{t.how.sub}</p>
         <div className="grid">
           {t.how.cards.map(([title, text], index) => (
@@ -285,8 +328,12 @@ export default function HomePage() {
               <h3 className="icon-title">
                 {index === 0 ? (
                   <NfcIcon />
+                ) : index === 1 ? (
+                  <LinkIcon />
+                ) : index === 2 ? (
+                  <WalletIcon />
                 ) : (
-                  <CircleIcon color={index % 2 === 0 ? "#60a5fa" : "#0ea5a6"} />
+                  <TeamIcon />
                 )}
                 {title}
               </h3>
@@ -297,13 +344,24 @@ export default function HomePage() {
       </section>
 
       <section className="container" id="plataforma">
-        <h2 className="section-title">{t.platform.title}</h2>
+        <h2 className="section-title icon-title">
+          <LinkIcon size={20} />
+          {t.platform.title}
+        </h2>
         <p className="section-sub">{t.platform.sub}</p>
         <div className="grid">
           {t.platform.cards.map(([title, text], index) => (
             <div className="card" key={title}>
               <h3 className="icon-title">
-                <CircleIcon color={index % 2 === 0 ? "#0ea5a6" : "#60a5fa"} />
+                {index === 0 ? (
+                  <LinkIcon />
+                ) : index === 1 ? (
+                  <SparkIcon />
+                ) : index === 2 ? (
+                  <TeamIcon />
+                ) : (
+                  <BoltIcon />
+                )}
                 {title}
               </h3>
               <p>{text}</p>
@@ -313,14 +371,21 @@ export default function HomePage() {
       </section>
 
       <section className="container" id="precos">
-        <h2 className="section-title">{t.pricing.title}</h2>
+        <h2 className="section-title icon-title">
+          <WalletIcon size={20} />
+          {t.pricing.title}
+        </h2>
         <p className="section-sub">{t.pricing.sub}</p>
         <div className="pricing">
           {t.pricing.cards.map(([badge, title, text], index) => (
             <div className="pricing-card" key={title}>
               <span className="badge">{badge}</span>
               <h3 className="icon-title">
-                <CircleIcon color={index % 2 === 0 ? "#0ea5a6" : "#60a5fa"} />
+                {index === 0 ? (
+                  <WalletIcon />
+                ) : (
+                  <NfcIcon />
+                )}
                 {title}
               </h3>
               <p>{text}</p>
@@ -330,7 +395,10 @@ export default function HomePage() {
       </section>
 
       <section className="container" id="contato">
-        <h2 className="section-title">{t.contact.title}</h2>
+        <h2 className="section-title icon-title">
+          <TeamIcon size={20} />
+          {t.contact.title}
+        </h2>
         <p className="section-sub">{t.contact.sub}</p>
         <div className="hero-actions">
           <a className="btn btn-primary" href="mailto:comercial@tapchurch.com.br">
