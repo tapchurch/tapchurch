@@ -73,13 +73,18 @@ export default function ContactPage() {
   return (
     <main>
       <div className="container">
-        <nav className="nav" style={{ marginBottom: 32 }}>
-          <a className="brand" href="/">
-            TAP CHURCH
+        <nav className="nav nav-home" style={{ marginBottom: 32 }}>
+          <a className="home-brand" href="/" aria-label="Ir para a página inicial">
+            <img
+              src="/tapchurch.png"
+              alt="TAP CHURCH"
+              style={{ width: 150, height: 44, objectFit: "contain" }}
+            />
           </a>
           <div className="nav-links">
             <a href="/">Início</a>
             <a href="/precos">Preços</a>
+            <a href="/contato">Contato</a>
             <a href="/login">Entrar</a>
           </div>
         </nav>
