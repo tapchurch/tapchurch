@@ -18,6 +18,8 @@ const copy = {
     hero: {
       title: "Um TAP para comunicar, ofertar e conectar.",
       desc: "O TAP CHURCH entrega a tag, o micro site e o painel para sua igreja atualizar tudo em minutos. O membro aproxima o celular e acessa avisos, ofertas e links oficiais.",
+      slideTitle: "Comunicacao e ofertas em um toque",
+      slideDesc: "Aproxime o celular e abra os links oficiais da igreja.",
       cta1: "Quero implementar",
       cta2: "Ver plataforma",
       cta3: "Painel admin",
@@ -92,6 +94,8 @@ const copy = {
     hero: {
       title: "One TAP to communicate, give, and connect.",
       desc: "TAP CHURCH delivers NFC tags, public pages, and a dashboard so churches can update everything in minutes.",
+      slideTitle: "Communication and giving in one tap",
+      slideDesc: "Tap with your phone and open official church links.",
       cta1: "I want this",
       cta2: "See platform",
       cta3: "Admin panel",
@@ -298,11 +302,13 @@ export default function HomePage() {
           </div>
         </div>
         <div className="hero-card">
-          <img
-            src="/tapchurch-hero.png"
-            alt="Exemplo visual TAP Church"
-            className="landing-hero-image"
-          />
+          <div className="landing-hero-slide">
+            <div className="landing-hero-overlay">
+              <span className="badge">TAP CHURCH</span>
+              <h3>{t.hero.slideTitle}</h3>
+              <p>{t.hero.slideDesc}</p>
+            </div>
+          </div>
           {t.tagCards.map((card) => (
             <div className="tag-preview" key={card.title}>
               <div className="tag-chip">{card.chip}</div>
