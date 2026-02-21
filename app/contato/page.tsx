@@ -74,7 +74,9 @@ export default function ContactPage() {
     <main>
       <div className="container">
         <nav className="nav" style={{ marginBottom: 32 }}>
-          <div className="brand">TAP CHURCH</div>
+          <a className="brand" href="/">
+            TAP CHURCH
+          </a>
           <div className="nav-links">
             <a href="/">Início</a>
             <a href="/precos">Preços</a>

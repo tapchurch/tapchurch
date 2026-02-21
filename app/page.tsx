@@ -245,7 +245,13 @@ export default function HomePage() {
       <div className="container">
         <nav className="nav nav-home">
           <div className="home-brand">
-            <img src="/tapchurch.png" alt="TAP CHURCH" style={{ width: 150, height: 44, objectFit: "contain" }} />
+            <a href="/" aria-label="Ir para a página inicial">
+              <img
+                src="/tapchurch.png"
+                alt="TAP CHURCH"
+                style={{ width: 150, height: 44, objectFit: "contain" }}
+              />
+            </a>
           </div>
           <div className="nav-links">
             <a href="#como-funciona">{t.nav.how}</a>

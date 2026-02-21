@@ -3,7 +3,9 @@ export default function PricingPage() {
     <main>
       <div className="container">
         <nav className="nav" style={{ marginBottom: 32 }}>
-          <div className="brand">TAP CHURCH</div>
+          <a className="brand" href="/">
+            TAP CHURCH
+          </a>
           <div className="nav-links">
             <a href="/">Início</a>
             <a href="/contato">Contato</a>
