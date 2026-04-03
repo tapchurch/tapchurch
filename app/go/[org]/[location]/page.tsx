@@ -67,6 +67,15 @@ function normalizeUrl(value: string) {
   return `https://${value}`;
 }
 
+function initialsFromName(value: string) {
+  return value
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
 export default function PublicPage() {
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
@@ -158,38 +167,57 @@ export default function PublicPage() {
 
   const primaryColor = org.primary_color ?? "#f4f7fb";
   const accentColor = org.accent_color ?? "#0ea5a6";
+  const accentColorSoft = `${accentColor}1a`;
 
   return (
     <main>
-      <div className="container" style={{ maxWidth: 720 }}>
-        <section style={{ marginTop: 24, display: "grid", gap: 16 }}>
-          <div className="micro-header">
-            <img
-              src={org.logo_url || "/tapchurch.png"}
-              alt={org.name}
-              onError={(event) => {
-                const img = event.currentTarget;
-                if (!img.src.endsWith("/tapchurch.png")) {
-                  img.src = "/tapchurch.png";
-                }
-              }}
-            />
-            <h1>{location.welcome_title ?? org.name}</h1>
-            <p>
-              {location.welcome_text ??
-                "Toque. Conecte. Comunique. Ofertas, avisos e links em um só lugar."}
-            </p>
+      <div className="container" style={{ maxWidth: 680 }}>
+        <section className="public-shell">
+          <div
+            className="public-hero"
+            style={{
+              background: `linear-gradient(180deg, ${accentColorSoft}, rgba(255,255,255,0.94))`
+            }}
+          >
+            <div
+              className="public-avatar"
+              style={{ borderColor: accentColor, boxShadow: `0 18px 42px ${accentColorSoft}` }}
+            >
+              <img
+                src={org.logo_url || "/tapchurch.png"}
+                alt={org.name}
+                onError={(event) => {
+                  const img = event.currentTarget;
+                  img.style.display = "none";
+                  const fallback = img.nextElementSibling as HTMLSpanElement | null;
+                  if (fallback) fallback.style.display = "grid";
+                }}
+              />
+              <span className="public-avatar-fallback">{initialsFromName(org.name)}</span>
+            </div>
+
+            <div className="public-hero-copy">
+              <span className="public-kicker">{org.name}</span>
+              <h1>{location.welcome_title ?? location.name}</h1>
+              <p>
+                {location.welcome_text ??
+                  "Ofertas, avisos e links oficiais em uma experiência simples e direta."}
+              </p>
+            </div>
+
             {featured.length > 0 ? (
-              <div className="micro-header-icons">
+              <div className="public-socials">
                 {featured.map((link) => {
                   const icon = iconForFeatured(link.featured_type ?? "");
                   if (!icon) return null;
                   return (
                     <a
                       key={link.id}
-                      href={link.url}
+                      href={normalizeUrl(link.url)}
                       target="_blank"
                       rel="noreferrer"
+                      className="public-social-link"
+                      aria-label={formatFeatured(link.featured_type ?? "")}
                     >
                       <img
                         src={icon}
@@ -202,88 +230,98 @@ export default function PublicPage() {
               </div>
             ) : null}
           </div>
-        </section>
 
-        <section style={{ marginTop: 20, display: "grid", gap: 12 }}>
+          <section className="public-links-stack">
           <OfferCheckoutForm churchSlug={org.slug} />
 
-          {featured.length > 0 ? (
-            <div style={{ display: "grid", gap: 10 }}>
-              <span className="featured-badge">Destaques</span>
-              {featured.map((link) => (
+            {featured.length > 0 ? (
+              <div className="public-section">
+                <span className="featured-badge">Destaques</span>
+                {featured.map((link) => (
+                  <a
+                    key={link.id}
+                    href={normalizeUrl(link.url)}
+                    className="public-link-card is-featured"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      borderColor: accentColor,
+                      background: `linear-gradient(180deg, ${accentColorSoft}, rgba(255,255,255,0.98))`
+                    }}
+                  >
+                    <div className="public-link-leading">
+                      {link.icon_url ? (
+                        <img src={link.icon_url} alt="" className="public-link-icon" />
+                      ) : (
+                        <span
+                          className="public-link-icon public-link-icon-fallback"
+                          style={{ color: accentColor }}
+                        >
+                          +
+                        </span>
+                      )}
+                    </div>
+                    <div className="public-link-body">
+                      <strong>{link.title}</strong>
+                      {link.description ? <span>{link.description}</span> : null}
+                    </div>
+                    <span className="public-link-arrow">Abrir</span>
+                  </a>
+                ))}
+              </div>
+            ) : null}
+
+            {normal.length === 0 && featured.length === 0 ? (
+              <div className="public-empty-state">
+                <strong>Nenhum link ativo no momento</strong>
+                <span>Volte em breve para novos acessos e campanhas.</span>
+              </div>
+            ) : (
+              normal.map((link) => (
                 <a
                   key={link.id}
                   href={normalizeUrl(link.url)}
-                  className="card micro-link"
+                  className="public-link-card"
                   target="_blank"
                   rel="noreferrer"
                   style={{
-                    display: "flex",
-                    justifyContent: "space-between",
                     borderColor: accentColor
                   }}
                 >
-                  <div className="micro-link-content">
+                  <div className="public-link-leading">
                     {link.icon_url ? (
-                      <img
-                        src={link.icon_url}
-                        alt=""
-                        className="micro-link-icon"
-                      />
-                    ) : null}
-                    <strong>{link.title}</strong>
-                    {link.description ? (
-                      <div style={{ color: "var(--muted)", fontSize: 12 }}>
-                        {link.description}
-                      </div>
-                    ) : null}
+                      <img src={link.icon_url} alt="" className="public-link-icon" />
+                    ) : (
+                      <span
+                        className="public-link-icon public-link-icon-fallback"
+                        style={{ color: accentColor }}
+                      >
+                        +
+                      </span>
+                    )}
                   </div>
+                  <div className="public-link-body">
+                    <strong>{link.title}</strong>
+                    {link.description ? <span>{link.description}</span> : null}
+                  </div>
+                  <span className="public-link-arrow">Abrir</span>
                 </a>
-              ))}
-            </div>
-          ) : null}
+              ))
+            )}
 
-          {normal.length === 0 && featured.length === 0 ? (
-            <div className="card">
-              <p>Sem links ativos no momento.</p>
+            <div className="public-footer-note">
+              <span>Powered by TAP CHURCH</span>
             </div>
-          ) : (
-            normal.map((link) => (
-              <a
-                key={link.id}
-                href={normalizeUrl(link.url)}
-                className="card micro-link"
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  borderColor: accentColor
-                }}
-              >
-                <div className="micro-link-content">
-                  {link.icon_url ? (
-                    <img
-                      src={link.icon_url}
-                      alt=""
-                      className="micro-link-icon"
-                    />
-                  ) : null}
-                  <strong>{link.title}</strong>
-                  {link.description ? (
-                    <div style={{ color: "var(--muted)", fontSize: 12 }}>
-                      {link.description}
-                    </div>
-                  ) : null}
-                </div>
-              </a>
-            ))
-          )}
+          </section>
         </section>
       </div>
       <style>{`
         body { background: ${primaryColor}; }
         .card { background: #ffffff; }
+        .public-link-card:hover {
+          border-color: ${accentColor};
+          box-shadow: 0 20px 38px ${accentColorSoft};
+        }
       `}</style>
     </main>
   );

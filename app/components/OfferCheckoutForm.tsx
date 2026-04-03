@@ -48,33 +48,36 @@ export default function OfferCheckoutForm({
   }
 
   return (
-    <div className="card" style={{ minHeight: "unset" }}>
-      <h3>Oferta por cartao / wallet</h3>
-      <p style={{ color: "var(--muted)" }}>
-        Apple Pay e Google Pay aparecem automaticamente no Checkout, quando
-        disponivel no dispositivo.
-      </p>
-      <div style={{ display: "grid", gap: 10, marginTop: 8 }}>
-        <label style={{ display: "grid", gap: 6 }}>
-          Valor da oferta (R$)
+    <section className="offer-box">
+      <div className="offer-box-copy">
+        <span className="offer-pill">Ofertas</span>
+        <h3>Contribua em segundos</h3>
+        <p>
+          Digite o valor e conclua no checkout seguro com cartao, Apple Pay ou
+          Google Pay, quando disponivel.
+        </p>
+      </div>
+      <div className="offer-box-form">
+        <label className="offer-field">
+          <span>Valor da oferta</span>
           <input
-            className="admin-input"
+            className="offer-input"
             inputMode="decimal"
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
             placeholder="50,00"
           />
         </label>
-        {error ? <span style={{ color: "#b42318" }}>{error}</span> : null}
+        {error ? <span className="offer-error">{error}</span> : null}
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-primary offer-button"
           onClick={handleCheckout}
           disabled={loading}
         >
           {loading ? "Redirecionando..." : buttonLabel}
         </button>
       </div>
-    </div>
+    </section>
   );
 }
