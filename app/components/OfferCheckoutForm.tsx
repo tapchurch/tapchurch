@@ -9,7 +9,7 @@ type Props = {
 
 export default function OfferCheckoutForm({
   churchSlug,
-  buttonLabel = "Ofertar com cartao / carteira digital"
+  buttonLabel = "Continuar para o checkout"
 }: Props) {
   const [amount, setAmount] = useState("50");
   const [loading, setLoading] = useState(false);
@@ -53,8 +53,8 @@ export default function OfferCheckoutForm({
         <span className="offer-pill">Ofertas</span>
         <h3>Contribua em segundos</h3>
         <p>
-          Digite o valor e conclua no checkout seguro com cartao, Apple Pay ou
-          Google Pay, quando disponivel.
+          Defina o valor da oferta e siga para um checkout seguro, moderno e
+          rapido com cartao, Apple Pay ou Google Pay quando disponivel.
         </p>
       </div>
       <div className="offer-box-form">
