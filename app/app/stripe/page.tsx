@@ -3,7 +3,6 @@
 export const dynamic = "force-dynamic";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import PanelHeader from "@/app/components/PanelHeader";
 
@@ -63,7 +62,6 @@ async function getAuthHeader() {
 }
 
 export default function StripeSettingsPage() {
-  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [org, setOrg] = useState<Organization | null>(null);
   const [status, setStatus] = useState<StripeStatus | null>(null);
@@ -120,8 +118,9 @@ export default function StripeSettingsPage() {
         setError(loadError instanceof Error ? loadError.message : "Falha inesperada.");
       }
 
-      const connected = searchParams.get("connected");
-      const refresh = searchParams.get("refresh");
+      const currentParams = new URLSearchParams(window.location.search);
+      const connected = currentParams.get("connected");
+      const refresh = currentParams.get("refresh");
       if (connected === "1") {
         setBanner("Conta Stripe atualizada. Recarregamos o status desta organizacao.");
       } else if (refresh === "1") {
@@ -132,7 +131,7 @@ export default function StripeSettingsPage() {
     }
 
     load();
-  }, [searchParams]);
+  }, []);
 
   const needsAttention = useMemo(() => {
     const requirements = status?.account?.requirements;
