@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import OfferCheckoutForm from "@/app/components/OfferCheckoutForm";
 
 type OrgData = {
   id: string;
@@ -12,8 +11,6 @@ type OrgData = {
   logo_url: string | null;
   primary_color: string | null;
   accent_color: string | null;
-  stripeAccountId?: string | null;
-  stripe_account_id?: string | null;
 };
 
 type LocationData = {
@@ -104,7 +101,7 @@ export default function PublicPage() {
 
       const { data: orgData, error: orgError } = await supabase
         .from("organizations")
-        .select("id, name, slug, logo_url, primary_color, accent_color, stripeAccountId, stripe_account_id")
+        .select("id, name, slug, logo_url, primary_color, accent_color")
         .eq("slug", orgSlug)
         .maybeSingle();
 
@@ -166,8 +163,6 @@ export default function PublicPage() {
 
   const featured = links.filter((link) => link.featured_type);
   const normal = links.filter((link) => !link.featured_type);
-  const hasCheckoutConfigured = Boolean(org.stripeAccountId ?? org.stripe_account_id);
-
   const primaryColor = org.primary_color ?? "#f4f7fb";
   const accentColor = org.accent_color ?? "#0ea5a6";
   const accentColorSoft = `${accentColor}1a`;
@@ -235,9 +230,6 @@ export default function PublicPage() {
           </div>
 
           <section className="public-links-stack">
-            {hasCheckoutConfigured ? (
-              <OfferCheckoutForm churchSlug={org.slug} />
-            ) : null}
 
             {featured.length > 0 ? (
               <div className="public-section">

@@ -176,7 +176,7 @@ export default function DashboardPage() {
               </a>
               <a className="card" href="/app/links">
                 <h3>Links</h3>
-                <p>Pix, carteira digital e links genericos.</p>
+                <p>Links oficiais, avisos e acessos rapidos por localidade.</p>
               </a>
               <a className="card" href="/app/settings">
                 <h3>Micro-site</h3>

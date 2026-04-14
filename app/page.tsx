@@ -16,8 +16,8 @@ const copy = {
       panel: "Entrar no painel"
     },
     hero: {
-      title: "Um TAP para comunicar, ofertar e conectar.",
-      desc: "O TAP CHURCH entrega a tag, o micro site e o painel para sua igreja atualizar tudo em minutos. O membro aproxima o celular e acessa avisos, ofertas e links oficiais.",
+      title: "Um TAP para comunicar, orientar e conectar.",
+      desc: "O TAP CHURCH entrega a tag, o micro site e o painel para sua igreja atualizar tudo em minutos. O membro aproxima o celular e acessa avisos, links oficiais e caminhos importantes da igreja.",
       cta1: "Quero implementar",
       cta2: "Ver plataforma",
       cta3: "Painel admin",
@@ -32,7 +32,7 @@ const copy = {
       {
         chip: "PIX + WALLET",
         title: "Links e comunicação",
-        text: "Pix, carteiras digitais, avisos e chamadas rápidas."
+        text: "Avisos, redes sociais, agenda e acessos rápidos em um só lugar."
       },
       {
         chip: "DASHBOARD",
@@ -42,17 +42,17 @@ const copy = {
     ],
     how: {
       title: "Como Funciona",
-      sub: "A igreja recebe tags prontas, cola no local e ativa a página de ofertas. O membro aproxima o celular e escolhe Pix ou carteira digital.",
+      sub: "A igreja recebe tags prontas, cola no local e ativa uma página simples de comunicação. O membro aproxima o celular e acessa avisos, agenda, links e conteúdos oficiais.",
       cards: [
         ["1. Tag instalada", "Enviamos a tag com layout da igreja. Basta fixar e ativar no painel."],
-        ["2. Micro site", "Um link exclusivo com botões de oferta, projetos e campanhas."],
-        ["3. Pagamento", "O membro escolhe Pix, Apple Pay ou Google Pay direto no celular."],
+        ["2. Micro site", "Um link exclusivo com botões para agenda, redes sociais, site, devocionais e campanhas."],
+        ["3. Acesso rápido", "O membro acessa links importantes da igreja em segundos, sem baixar aplicativo."],
         ["4. Gestão central", "O gestor controla várias localidades em uma única conta."]
       ]
     },
     platform: {
       title: "Plataforma feita para igrejas",
-      sub: "Você não precisa ser fintech. Cada igreja usa seus próprios links de pagamento, e o TAP CHURCH organiza tudo.",
+      sub: "A proposta agora é simples: transformar a tag em um ponto de contato rápido entre igreja e membro.",
       cards: [
         ["Links por localidade", "Sede e filiais com páginas diferentes e organizadas por campanha."],
         ["Painel simples", "Troque links, textos e ordem dos botões em segundos."],
@@ -62,7 +62,7 @@ const copy = {
     },
     pricing: {
       title: "Modelo de cobrança claro",
-      sub: "Mensalidade por igreja e valor por tag. Sem taxas em cima das ofertas.",
+      sub: "Mensalidade por igreja e valor por tag, com foco em comunicação, presença e organização.",
       cards: [
         ["Plano plataforma", "Mensalidade por igreja", "Acesso ao painel, micro site, suporte e atualizações."],
         ["Tags NFC", "Tag personalizada", "Unidade com layout da igreja e configuração pronta."],
@@ -75,8 +75,8 @@ const copy = {
       talk: "Falar com a equipe"
     },
     footer: {
-      l1: "Plataforma de ofertas por aproximação para igrejas.",
-      l2: "Pix, Apple Pay e Google Pay por links próprios da igreja."
+      l1: "Plataforma de comunicação por aproximação para igrejas.",
+      l2: "Tags NFC, páginas inteligentes e gestão simples para cada localidade."
     }
   },
   en: {
@@ -90,7 +90,7 @@ const copy = {
       panel: "Go to dashboard"
     },
     hero: {
-      title: "One TAP to communicate, give, and connect.",
+      title: "One TAP to communicate, guide, and connect.",
       desc: "TAP CHURCH delivers NFC tags, public pages, and a dashboard so churches can update everything in minutes.",
       cta1: "I want this",
       cta2: "See platform",
@@ -106,7 +106,7 @@ const copy = {
       {
         chip: "PIX + WALLET",
         title: "Links and communication",
-        text: "Pix, digital wallets, announcements, and quick actions."
+        text: "Announcements, social links, schedules, and quick actions."
       },
       {
         chip: "DASHBOARD",
@@ -116,17 +116,17 @@ const copy = {
     ],
     how: {
       title: "How it works",
-      sub: "The church receives ready-to-use tags, installs them, and activates links. Members tap and choose the payment option.",
+      sub: "The church receives ready-to-use tags, installs them, and activates key links. Members tap to access the right information instantly.",
       cards: [
         ["1. Tag installed", "We ship tags with church branding. Just place and activate."],
         ["2. Public page", "Each location has its own page and key buttons."],
-        ["3. Payment", "Members choose Pix, Apple Pay, or Google Pay on mobile."],
+        ["3. Quick access", "Members open the church page and access the right content on mobile."],
         ["4. Central management", "Manage multiple locations under one account."]
       ]
     },
     platform: {
       title: "Built for churches",
-      sub: "You are not a fintech. Each church uses its own payment links and TAP CHURCH organizes the experience.",
+      sub: "The current focus is simple: turn the NFC tag into a fast communication channel between church and member.",
       cards: [
         ["Links by location", "Main campus and branches with separate pages."],
         ["Simple dashboard", "Change links and content in seconds."],
@@ -136,7 +136,7 @@ const copy = {
     },
     pricing: {
       title: "Clear pricing model",
-      sub: "Monthly platform fee plus NFC tags. No fee on church donations.",
+      sub: "Monthly platform fee plus NFC tags, focused on communication and organization.",
       cards: [
         ["Platform plan", "Monthly per church", "Dashboard access, page hosting, support, and updates."],
         ["NFC Tags", "Custom tag", "Ready-to-use units with church branding."],
@@ -149,8 +149,8 @@ const copy = {
       talk: "Talk to sales"
     },
     footer: {
-      l1: "Tap-based giving and communication platform for churches.",
-      l2: "Pix, Apple Pay, and Google Pay with church-owned links."
+      l1: "Tap-based communication platform for churches.",
+      l2: "NFC tags, smart pages, and simple management for every church location."
     }
   }
 } as const;

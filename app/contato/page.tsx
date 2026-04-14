@@ -5,8 +5,8 @@ import { useMemo, useState } from "react";
 const reasons = [
   "Quero uma demonstração",
   "Preciso de proposta comercial",
-  "Dúvidas sobre Stripe e pagamentos",
-  "Implantação para múltiplas igrejas"
+  "Dúvidas sobre comunicação e implantação",
+  "Quero estruturar tags por localidade"
 ];
 
 function buildSummary(params: {

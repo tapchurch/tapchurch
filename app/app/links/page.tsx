@@ -437,7 +437,7 @@ export default function LinksPage() {
         <section className="hero">
           <div>
             <h1>Links</h1>
-            <p>TAP para comunicar, avisar e facilitar ofertas.</p>
+            <p>TAP para comunicar, orientar e centralizar acessos da igreja.</p>
           </div>
           <div className="hero-card">
             <strong>Organizacao</strong>
@@ -569,22 +569,6 @@ export default function LinksPage() {
                   className="admin-input"
                 >
                   <option value="generic">Generico</option>
-                  <option value="payment">Pagamento</option>
-                </select>
-              </label>
-              <label className="field">
-                Metodo
-                <select
-                  value={method ?? "pix"}
-                  onChange={(event) =>
-                    setMethod(event.target.value as LinkItem["method"])
-                  }
-                  disabled={category === "generic"}
-                  className="admin-input"
-                >
-                  <option value="pix">Pix</option>
-                  <option value="digital_wallet">Carteira digital</option>
-                  <option value="custom">Outro</option>
                 </select>
               </label>
               <label className="field">
@@ -701,25 +685,9 @@ export default function LinksPage() {
                             className="admin-input"
                           >
                             <option value="generic">Generico</option>
-                            <option value="payment">Pagamento</option>
-                          </select>
+                                    </select>
                         </label>
-                        <label className="field">
-                          Metodo
-                          <select
-                            value={editMethod ?? "pix"}
-                            onChange={(event) =>
-                              setEditMethod(event.target.value as LinkItem["method"])
-                            }
-                            disabled={editCategory === "generic"}
-                            className="admin-input"
-                          >
-                            <option value="pix">Pix</option>
-                            <option value="digital_wallet">Carteira digital</option>
-                            <option value="custom">Outro</option>
-                          </select>
-                        </label>
-                        <label className="field">
+                                  <label className="field">
                           Destaque (opcional)
                           <select
                             value={editFeaturedType ?? ""}
@@ -774,7 +742,7 @@ export default function LinksPage() {
                           <div className="link-admin-head">
                             <strong>{link.title}</strong>
                             <div className="link-admin-badges">
-                              <span className="badge soft-badge">{link.category === "payment" ? "Pagamento" : "Link"}</span>
+                              <span className="badge soft-badge">Link</span>
                               {link.featured_type ? <span className="badge soft-badge">Destaque</span> : null}
                             </div>
                           </div>
@@ -872,9 +840,7 @@ export default function LinksPage() {
                         <div style={{ display: "grid", gap: 2 }}>
                           <strong>{link.title}</strong>
                           <span style={{ color: "var(--muted)", fontSize: 12 }}>
-                            {link.category === "payment"
-                              ? `Pagamento · ${link.method ?? "pix"}`
-                              : "Link"}
+                            "Link"
                           </span>
                         </div>
                         <span style={{ color: "var(--muted)" }}>Abrir</span>

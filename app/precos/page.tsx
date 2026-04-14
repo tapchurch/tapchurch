@@ -23,7 +23,8 @@ export default function PricingPage() {
             <h1>Preços e modelo comercial</h1>
             <p>
               Estrutura clara para igrejas começarem rápido e escalar por
-              localidade.
+              localidade, com explicação direta de implantação, mensalidade e
+              uso da tag como canal de comunicação.
             </p>
           </div>
           <div className="hero-card">
@@ -31,6 +32,28 @@ export default function PricingPage() {
             <span>Plataforma mensal: R$ 49,90 por igreja</span>
             <span>Tag sem personalização: R$ 19,90 por unidade</span>
             <span>Tag personalizada: valor sob consulta</span>
+          </div>
+        </section>
+
+        <section className="card" style={{ marginTop: 24 }}>
+          <h3>Como funciona a cobrança</h3>
+          <div style={{ display: "grid", gap: 8 }}>
+            <p>
+              1. A igreja contrata a plataforma e paga a mensalidade fixa de{" "}
+              <strong>R$ 49,90/mês</strong>.
+            </p>
+            <p>
+              2. A implantação das tags é calculada por quantidade, com opção
+              sem personalização ou personalizada.
+            </p>
+            <p>
+              3. A igreja organiza suas páginas, links e localidades em um único
+              painel, sem depender de suporte técnico.
+            </p>
+            <p>
+              4. O foco atual da plataforma está em comunicação rápida,
+              organização e ativação das tags NFC.
+            </p>
           </div>
         </section>
 
@@ -45,6 +68,10 @@ export default function PricingPage() {
               Inclui painel administrativo, gestão de localidades, links
               dinâmicos, páginas públicas e suporte operacional.
             </p>
+            <p>
+              Ideal para manter comunicação, campanhas e acessos oficiais sempre
+              atualizados sem depender de equipe técnica.
+            </p>
           </div>
 
           <div className="pricing-card">
@@ -57,6 +84,7 @@ export default function PricingPage() {
               Opção econômica para implantação rápida em cadeiras, entradas e
               ambientes de circulação.
             </p>
+            <p>Indicada para expansão em volume com custo previsível.</p>
           </div>
 
           <div className="pricing-card">
@@ -68,6 +96,9 @@ export default function PricingPage() {
             <p>
               Valor varia por volume, acabamento e complexidade da identidade
               visual da igreja.
+            </p>
+            <p>
+              Recomendado para igrejas que querem reforço de marca no ambiente.
             </p>
           </div>
         </section>
@@ -95,26 +126,45 @@ export default function PricingPage() {
         </section>
 
         <section className="card" style={{ marginTop: 24 }}>
-          <h3>Stripe: como funciona no TAP CHURCH</h3>
+          <h3>O que está incluído no plano mensal</h3>
           <div style={{ display: "grid", gap: 8 }}>
+            <p>• Painel para criar e editar links por localidade.</p>
+            <p>• Página pública por igreja/localidade para acesso via NFC.</p>
+            <p>• Área de equipe com controle de acesso por usuário.</p>
+            <p>• Ajustes de aparência (logo, cores e conteúdo principal).</p>
+            <p>• Suporte operacional para dúvidas de uso da plataforma.</p>
+          </div>
+        </section>
+
+        
+
+        <section className="card" style={{ marginTop: 24 }}>
+          <h3>Perguntas frequentes</h3>
+          <div style={{ display: "grid", gap: 10 }}>
             <p>
-              Cada igreja conecta sua própria conta Stripe (Connect Express) e
-              recebe os valores diretamente nela.
+              <strong>Preciso instalar aplicativo para usar a tag?</strong>
             </p>
             <p>
-              O checkout suporta cartão, Apple Pay e Google Pay conforme o
-              dispositivo/navegador do ofertante.
+              Não. O membro apenas aproxima o celular e abre a página da igreja
+              com os links e informações definidos no painel.
             </p>
             <p>
-              Na operação de oferta, a plataforma aplica uma taxa de
-              intermediação de <strong>1%</strong> do valor
-              (`application_fee_amount`), e o restante é transferido para a
-              conta da igreja (`transfer_data.destination`).
+              <strong>Preciso comprar todas as tags de uma vez?</strong>
             </p>
             <p>
-              As taxas de processamento da Stripe são definidas pela própria
-              Stripe e podem variar por país, método de pagamento e tipo de
-              conta.
+              Não. Você pode começar com um lote inicial e expandir por fases.
+            </p>
+            <p>
+              <strong>Posso ter várias localidades no mesmo acesso?</strong>
+            </p>
+            <p>
+              Sim. A estrutura já foi desenhada para gestão multi-localidade.
+            </p>
+            <p>
+              <strong>Tag personalizada tem preço fixo?</strong>
+            </p>
+            <p>
+              Não. O valor depende do projeto gráfico, material e quantidade.
             </p>
           </div>
         </section>

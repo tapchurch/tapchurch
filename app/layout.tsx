@@ -17,7 +17,7 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: "TAP CHURCH",
-  description: "Ofertas por aproximação com NFC, Pix e carteiras digitais. Plataforma para igrejas e múltiplas localidades."
+  description: "Comunicação por aproximação com NFC para igrejas. Plataforma para múltiplas localidades, links oficiais e gestão simples."
 };
 
 export default function RootLayout({

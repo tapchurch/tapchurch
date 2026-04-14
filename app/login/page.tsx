@@ -52,7 +52,7 @@ export default function LoginPage() {
             <h1>Entrar no painel</h1>
             <p>
               Acesse com o e-mail da igreja para gerenciar localidades, tags e
-              links de pagamento.
+              links de comunicação.
             </p>
             <div className="card" style={{ marginTop: 16, minHeight: "unset" }}>
               <h3>Antes de entrar</h3>
